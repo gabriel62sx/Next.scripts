@@ -1,10 +1,11 @@
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NexScript | Plataforma</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Rajdhani:wght@700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Rajdhani:wght@700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
     <style>
         :root {
             --bg: #050505;
@@ -31,14 +32,16 @@
             height: 100vh;
             overflow: hidden;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         #snow-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
             z-index: 1;
             overflow: hidden;
@@ -54,7 +57,9 @@
         }
 
         @keyframes fall {
-            to { transform: translateY(105vh); }
+            to {
+                transform: translateY(105vh);
+            }
         }
 
         #gatekeeper {
@@ -112,7 +117,7 @@
         }
 
         #main-content {
-            height: 100vh;
+            flex: 1;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -130,14 +135,19 @@
             flex-shrink: 0;
         }
 
+        /* Logo: no color in span so it does not affect tab title */
         .logo-mini {
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.8rem;
             font-weight: 800;
             color: white;
+            user-select: none;
         }
 
-        .logo-mini span { color: var(--primary); }
+        /* Removed the color on span to avoid blue text in title */
+        .logo-mini span {
+            color: white; 
+        }
 
         .user-pill {
             display: flex;
@@ -149,6 +159,7 @@
             cursor: pointer;
             border: 1px solid transparent;
             transition: 0.3s;
+            user-select: none;
         }
 
         .user-pill:hover {
@@ -175,6 +186,7 @@
             flex: 1;
             overflow: hidden;
             min-height: 0;
+            flex-direction: column;
         }
 
         .sidebar {
@@ -198,6 +210,7 @@
             align-items: center;
             gap: 12px;
             font-weight: 600;
+            user-select: none;
         }
 
         .nav-item:hover,
@@ -213,6 +226,8 @@
             overflow-y: auto;
             position: relative;
             min-height: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         .content-area::-webkit-scrollbar {
@@ -241,6 +256,7 @@
             text-transform: uppercase;
             font-size: 0.9rem;
             letter-spacing: 1px;
+            user-select: none;
         }
 
         .btn-action:hover {
@@ -263,6 +279,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
+            flex-grow: 1;
         }
 
         .script-card {
@@ -293,10 +310,9 @@
         }
 
         .script-card h3 {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             margin-bottom: 6px;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.3rem;
         }
 
         .script-author {
@@ -334,7 +350,9 @@
             user-select: all;
         }
 
-        .input-group { margin-bottom: 15px; }
+        .input-group {
+            margin-bottom: 15px;
+        }
 
         .input-group label {
             display: block;
@@ -372,6 +390,7 @@
             z-index: 10000;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             font-weight: 600;
+            user-select: none;
         }
 
         .profile-section {
@@ -387,6 +406,7 @@
             border-radius: 50%;
             border: 2px solid var(--primary);
             flex-shrink: 0;
+            object-fit: cover;
         }
 
         .profile-form {
@@ -395,35 +415,72 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            background: var(--panel);
+            padding: 12px 30px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-align: center;
+            flex-shrink: 0;
+            user-select: none;
+        }
 
         @media (max-width: 768px) {
-            .sidebar { width: 60px; padding: 10px; }
+            .sidebar {
+                width: 60px;
+                padding: 10px;
+            }
             .nav-item span,
-            .nav-item { font-size: 0; gap: 0; justify-content: center; padding: 14px; }
-            .nav-item i { font-size: 1.2rem; }
-            .content-area { padding: 15px; }
-            .script-grid { grid-template-columns: 1fr; }
-            .profile-section { flex-direction: column; align-items: center; }
+            .nav-item {
+                font-size: 0;
+                gap: 0;
+                justify-content: center;
+                padding: 14px;
+            }
+            .nav-item i {
+                font-size: 1.2rem;
+            }
+            .content-area {
+                padding: 15px;
+            }
+            .script-grid {
+                grid-template-columns: 1fr;
+            }
+            .profile-section {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
-
     <div id="snow-container"></div>
 
     <div id="gatekeeper">
+        <!-- LOGIN BOX -->
         <div class="auth-card" id="login-box">
             <h2>Acessar Sistema</h2>
             <div class="input-group">
-                <input type="email" id="auth-email" class="input-field" placeholder="Seu E-mail">
+                <input type="email" id="auth-email" class="input-field" placeholder="Seu E-mail" />
             </div>
             <div class="input-group">
-                <input type="password" id="auth-pass" class="input-field" placeholder="Sua Senha">
+                <input type="password" id="auth-pass" class="input-field" placeholder="Sua Senha" />
             </div>
             <button class="btn-action" onclick="handleLogin()">Conectar</button>
             <div style="display:flex;justify-content:space-between;margin-top:20px;font-size:0.85rem;">
@@ -432,16 +489,17 @@
             </div>
         </div>
 
+        <!-- REGISTER BOX -->
         <div class="auth-card hidden" id="register-box">
             <h2>Nova Identidade</h2>
             <div class="input-group">
-                <input type="text" id="reg-name" class="input-field" placeholder="Nome de Usuário">
+                <input type="text" id="reg-name" class="input-field" placeholder="Nome de Usuário" />
             </div>
             <div class="input-group">
-                <input type="email" id="reg-email" class="input-field" placeholder="E-mail">
+                <input type="email" id="reg-email" class="input-field" placeholder="E-mail" />
             </div>
             <div class="input-group">
-                <input type="password" id="reg-pass" class="input-field" placeholder="Senha (min. 6 dígitos)">
+                <input type="password" id="reg-pass" class="input-field" placeholder="Senha (min. 6 dígitos)" />
             </div>
             <button class="btn-action" onclick="handleRegister()">Gerar ID e Entrar</button>
             <p style="margin-top:15px;text-align:center;font-size:0.85rem;">
@@ -455,48 +513,59 @@
         </div>
     </div>
 
-    <div id="main-content" class="hidden">
+    <div id="main-content" class="hidden" style="display:flex; flex-direction: column; height: 100vh;">
         <header>
-            <div class="logo-mini">NEX<span>SCRIPT</span></div>
+            <div class="logo-mini">NEXSCRIPT</div>
             <div class="user-pill" onclick="showView('settings')">
                 <span class="user-id" id="header-user-id">#0000</span>
                 <span id="header-user-name">Usuário</span>
-                <img id="header-user-pic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+                <img id="header-user-pic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
             </div>
         </header>
 
-        <div class="dashboard-container">
+        <div style="display: flex; flex: 1; overflow: hidden;">
             <div class="sidebar">
-                <div class="nav-item active" onclick="showView('explore', this)"><i class="fas fa-globe"></i> Explorar</div>
-                <div class="nav-item" onclick="showView('settings', this)"><i class="fas fa-cog"></i> Perfil</div>
+                <div class="nav-item active" onclick="showView('explore', this)">
+                    <i class="fas fa-globe"></i> <span>Explorar</span>
+                </div>
+                <div class="nav-item" onclick="showView('settings', this)">
+                    <i class="fas fa-cog"></i> <span>Perfil</span>
+                </div>
                 <div style="flex:1"></div>
-                <div class="nav-item btn-danger" onclick="handleLogout()"><i class="fas fa-power-off"></i> Sair</div>
+                <div class="nav-item btn-danger" onclick="handleLogout()">
+                    <i class="fas fa-power-off"></i> <span>Sair</span>
+                </div>
             </div>
 
             <div class="content-area">
-                <div id="view-explore" class="page-view">
-                    <h2 style="margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:10px;">
+                <div id="view-explore" class="page-view" style="display:flex; flex-direction: column; flex-grow: 1;">
+                    <h2 style="margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
                         Scripts Disponíveis
                     </h2>
                     <div class="script-grid" id="scripts-container"></div>
+                    
+                    <!-- Rodapé dentro de explorar -->
+                    <footer>
+                        © 2024 NexScript - Todos os direitos reservados.
+                    </footer>
                 </div>
 
                 <div id="view-settings" class="page-view hidden">
                     <h2>Meu Perfil</h2>
                     <div class="profile-section">
-                        <img id="settings-pic" src="">
+                        <img id="settings-pic" src="" alt="Foto do usuário" />
                         <div class="profile-form">
                             <div class="input-group">
                                 <label>Seu ID (Imutável)</label>
-                                <input type="text" id="settings-id" class="input-field" disabled style="opacity:0.5;">
+                                <input type="text" id="settings-id" class="input-field" disabled style="opacity:0.5;" />
                             </div>
                             <div class="input-group">
                                 <label>Nome de Exibição</label>
-                                <input type="text" id="settings-name" class="input-field">
+                                <input type="text" id="settings-name" class="input-field" />
                             </div>
                             <div class="input-group">
                                 <label>URL da Foto de Perfil</label>
-                                <input type="text" id="settings-pic-url" class="input-field">
+                                <input type="text" id="settings-pic-url" class="input-field" />
                             </div>
                             <button class="btn-action" onclick="saveProfile()">Salvar Perfil</button>
                         </div>
@@ -515,7 +584,7 @@
         window.onload = function () {
             createSnow();
             checkSession();
-            document.getElementById('user-count-display').innerText = (1420 + users.length) + " hackers registrados globalmente";
+            document.getElementById('user-count-display').innerText = 1420 + users.length + " hackers registrados globalmente";
         };
 
         function createSnow() {
@@ -524,7 +593,8 @@
                 const flake = document.createElement('div');
                 flake.className = 'snowflake';
                 flake.style.left = Math.random() * 100 + 'vw';
-                flake.style.width = flake.style.height = (Math.random() * 3 + 2) + 'px';
+                const size = Math.random() * 3 + 2;
+                flake.style.width = flake.style.height = size + 'px';
                 flake.style.animationDuration = (Math.random() * 3 + 5) + 's';
                 flake.style.animationDelay = (Math.random() * 5) + 's';
                 container.appendChild(flake);
@@ -536,7 +606,10 @@
             if (session) {
                 const sessionData = JSON.parse(session);
                 const user = users.find(u => u.id === sessionData.id);
-                if (user) { loggedUser = user; enterApp(); }
+                if (user) {
+                    loggedUser = user;
+                    enterApp();
+                }
             }
         }
 
@@ -662,7 +735,7 @@
             const t = document.getElementById('toast');
             t.innerText = msg;
             t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
+            setTimeout(() => (t.style.display = 'none'), 3000);
         }
     </script>
 </body>

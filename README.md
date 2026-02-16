@@ -1,4 +1,4 @@
-<html lang="pt-br">
+[<html lang="pt-br">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -740,3 +740,4 @@
     </script>
 </body>
 </html>
+](https://rewards.bing.com/welcome?rh=D599F4CF&ref=rafsrchae&form=ML2XE3&OCID=ML2XE3&PUBL=RewardsDO&CREA=ML2XE3)

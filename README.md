@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexScript | Plataforma</title>
+    <title>NexScript | Global</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Rajdhani:wght@700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -16,7 +16,7 @@
             --text: #e2e8f0;
             --muted: #64748b;
             --border: rgba(59, 130, 246, 0.15);
-            --glass: rgba(15, 17, 21, 0.7);
+            --glass: rgba(15, 17, 21, 0.85);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -29,7 +29,7 @@
             position: relative;
         }
 
-        /* --- EFEITO DE NEVE --- */
+        /* --- CORREÇÃO DO EFEITO DE NEVE (Não interfere no layout) --- */
         #snow-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1; overflow: hidden;
@@ -43,7 +43,7 @@
             to { transform: translateY(105vh); }
         }
 
-        /* --- TELA DE LOGIN (GATEKEEPER) --- */
+        /* --- TELA DE LOGIN --- */
         #gatekeeper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg); z-index: 9999;
@@ -54,7 +54,6 @@
 
         .hero-title {
             text-align: center; margin-bottom: 40px; z-index: 10;
-            animation: slideDown 0.8s ease-out;
         }
         .hero-title h1 {
             font-family: 'Rajdhani', sans-serif;
@@ -79,12 +78,6 @@
             animation: fadeIn 1s ease;
         }
 
-        .stats-counter {
-            position: absolute; bottom: 20px; color: var(--muted); font-size: 0.8rem;
-            display: flex; gap: 10px; align-items: center;
-        }
-        .online-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; }
-
         /* --- INTERFACE PRINCIPAL --- */
         #main-content { display: none; height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 5; }
 
@@ -92,6 +85,7 @@
             padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
             background: var(--glass); backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
+            height: 70px; flex-shrink: 0;
         }
 
         .logo-mini { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; font-weight: 800; color: white; }
@@ -105,14 +99,14 @@
         .user-pill img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
         .user-id { font-size: 0.8rem; color: var(--accent); font-weight: bold; margin-right: 5px; }
 
-        /* --- LAYOUT DO DASHBOARD --- */
+        /* --- DASHBOARD --- */
         .dashboard-container {
-            display: flex; flex: 1; overflow: hidden;
+            display: flex; flex: 1; overflow: hidden; /* Importante para o scroll funcionar só no conteúdo */
         }
 
         .sidebar {
-            width: 260px; background: rgba(10, 12, 16, 0.8); border-right: 1px solid var(--border);
-            padding: 20px; display: flex; flex-direction: column; gap: 10px;
+            width: 260px; background: rgba(10, 12, 16, 0.9); border-right: 1px solid var(--border);
+            padding: 20px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0;
         }
 
         .nav-item { 
@@ -123,9 +117,22 @@
 
         .content-area {
             flex: 1; padding: 30px; overflow-y: auto; position: relative;
+            display: flex; flex-direction: column;
         }
 
-        /* --- ESTILOS DE INPUT E BOTÕES --- */
+        /* --- FOOTER (NOVIDADE) --- */
+        footer {
+            margin-top: auto; /* Empurra para o fundo */
+            padding-top: 40px;
+            padding-bottom: 10px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        footer p span { color: var(--primary); font-weight: bold; }
+
+        /* --- INPUTS E BOTÕES --- */
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; margin-bottom: 6px; font-size: 0.8rem; color: var(--muted); }
         .input-field {
@@ -144,26 +151,49 @@
         .btn-danger { background: rgba(255, 50, 50, 0.1); color: #ff3333; border: 1px solid #ff3333; }
         .btn-danger:hover { background: #ff3333; color: white; }
 
-        /* --- CARDS DE SCRIPTS --- */
-        .script-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        /* --- SCRIPTS --- */
+        .script-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .script-card { 
             background: #0a0c10; border-radius: 16px; padding: 15px; border: 1px solid #1e293b; 
-            transition: 0.3s; position: relative; overflow: hidden;
+            transition: 0.3s; position: relative; overflow: hidden; display: flex; flex-direction: column;
         }
         .script-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .script-thumb { width: 100%; height: 140px; border-radius: 10px; margin-bottom: 12px; object-fit: cover; background: #111; }
+        .script-thumb { width: 100%; height: 150px; border-radius: 10px; margin-bottom: 12px; object-fit: cover; background: #111; }
+
+        /* --- CHAT CORRIGIDO (Flechas Azuis) --- */
+        .chat-container { 
+            display: flex; height: calc(100vh - 140px); /* Altura fixa para não vazar */
+            gap: 20px; overflow: hidden;
+        }
+        .chat-list { 
+            width: 300px; border-right: 1px solid var(--border); padding-right: 20px; 
+            display: flex; flex-direction: column;
+        }
+        .chat-window { 
+            flex: 1; display: flex; flex-direction: column; 
+            background: rgba(0,0,0,0.2); border-radius: 16px; 
+            border: 1px solid var(--border); 
+            overflow: hidden;
+            position: relative; /* Para centralizar o placeholder */
+        }
         
-        /* --- CHAT ESTILO WHATSAPP --- */
-        .chat-container { display: flex; height: 100%; gap: 20px; }
-        .chat-list { width: 30%; border-right: 1px solid var(--border); padding-right: 20px; }
-        .chat-window { flex: 1; display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border-radius: 16px; border: 1px solid var(--border); }
-        
-        .messages-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg { max-width: 70%; padding: 10px 15px; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; }
+        /* Placeholder para quando não tem chat aberto */
+        .chat-placeholder {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--muted); text-align: center;
+        }
+        .chat-placeholder i { font-size: 4rem; margin-bottom: 20px; color: var(--border); }
+
+        .messages-area { 
+            flex: 1; padding: 20px; overflow-y: auto; 
+            display: flex; flex-direction: column; gap: 10px; 
+        }
+        .msg { max-width: 70%; padding: 10px 15px; border-radius: 12px; font-size: 0.9rem; line-height: 1.4; word-wrap: break-word;}
         .msg.sent { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 2px; }
         .msg.received { align-self: flex-start; background: #1e293b; color: #cbd5e1; border-bottom-left-radius: 2px; }
         
-        .chat-input-area { padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .chat-input-area { padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: rgba(0,0,0,0.3); }
 
         /* --- TOAST --- */
         #toast {
@@ -173,10 +203,9 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-weight: 600;
         }
 
+        .hidden { display: none !important; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -186,12 +215,12 @@
     <div id="gatekeeper">
         <div class="hero-title">
             <h1>NexScript</h1>
-            <span>PROJECT REVOLUTION</span>
+            <span>CONEXÃO GLOBAL</span>
         </div>
 
         <div class="auth-card" id="login-box">
             <h2 style="margin-bottom: 5px;">Acessar Sistema</h2>
-            <p style="color: var(--muted); margin-bottom: 25px; font-size: 0.9rem;">Entre com suas credenciais seguras.</p>
+            <p style="color: var(--muted); margin-bottom: 25px; font-size: 0.9rem;">Entre com suas credenciais.</p>
             
             <div class="input-group">
                 <input type="email" id="auth-email" class="input-field" placeholder="Seu E-mail">
@@ -203,7 +232,7 @@
             <button class="btn-action" onclick="handleLogin()">Conectar</button>
             
             <div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 0.85rem;">
-                <a href="#" onclick="recoverAccount()" style="color: var(--muted);">Esqueci a senha</a>
+                <a href="#" onclick="alert('Dica: Crie uma conta nova!')" style="color: var(--muted);">Esqueci a senha</a>
                 <a href="#" onclick="toggleAuth(true)" style="color: var(--primary);">Criar Conta</a>
             </div>
         </div>
@@ -215,7 +244,7 @@
                 <input type="text" id="reg-name" class="input-field" placeholder="Ex: MasterCoder">
             </div>
             <div class="input-group">
-                <label>E-mail (Google/Real)</label>
+                <label>E-mail</label>
                 <input type="email" id="reg-email" class="input-field" placeholder="exemplo@gmail.com">
             </div>
             <div class="input-group">
@@ -226,11 +255,6 @@
             <p style="margin-top: 15px; text-align: center; font-size: 0.85rem;">
                 <a href="#" onclick="toggleAuth(false)" style="color: var(--muted);">Voltar para Login</a>
             </p>
-        </div>
-
-        <div class="stats-counter">
-            <div class="online-dot"></div>
-            <span id="user-count-display">Carregando usuários...</span>
         </div>
     </div>
 
@@ -251,20 +275,21 @@
                 <div class="nav-item" onclick="showView('chat', this)"><i class="fab fa-whatsapp"></i> Chat Secreto</div>
                 <div class="nav-item" onclick="showView('settings', this)"><i class="fas fa-cog"></i> Configurações</div>
                 <div style="flex: 1"></div>
-                <div class="nav-item btn-danger" onclick="handleLogout()"><i class="fas fa-power-off"></i> Deslogar</div>
+                <div class="nav-item btn-danger" onclick="handleLogout()"><i class="fas fa-power-off"></i> Sair</div>
             </div>
 
             <div class="content-area">
+                
                 <div id="view-explore" class="page-view">
-                    <h2 style="margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                        Feed Global <span style="font-size: 0.8rem; color: var(--muted); font-weight: normal;">(Visível neste dispositivo)</span>
+                    <h2 style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
+                        Feed Global <span style="font-size: 0.8rem; color: var(--primary);">(Simulação Local)</span>
                     </h2>
                     <div class="script-grid" id="scripts-container"></div>
                 </div>
 
                 <div id="view-publish" class="page-view hidden">
                     <h2>Criar Novo Script</h2>
-                    <p style="color: var(--muted); margin-bottom: 20px;">Compartilhe sua criação com a rede.</p>
+                    <p style="color: var(--muted); margin-bottom: 20px;">Compartilhe sua criação.</p>
                     
                     <div style="max-width: 600px;">
                         <div class="input-group">
@@ -279,7 +304,7 @@
                             <label>Código do Script</label>
                             <textarea id="script-code" class="input-field" style="height: 150px; font-family: monospace;"></textarea>
                         </div>
-                        <button class="btn-action" onclick="submitScript()">Publicar Agora</button>
+                        <button class="btn-action" onclick="submitScript()">Publicar</button>
                     </div>
                 </div>
 
@@ -288,25 +313,30 @@
                         <div class="chat-list">
                             <h3 style="margin-bottom: 15px;">Conversas</h3>
                             <div class="input-group">
-                                <input type="text" id="new-chat-id" class="input-field" placeholder="Digite o ID (ex: #1234)">
-                                <button class="btn-action" onclick="startChat()" style="margin-top: 5px; padding: 8px;">Iniciar Conversa</button>
+                                <input type="text" id="new-chat-id" class="input-field" placeholder="Digite ID (ex: #1234)">
+                                <button class="btn-action" onclick="startChat()" style="margin-top: 5px; padding: 8px;">Nova Conversa</button>
                             </div>
-                            <div id="active-chats-list" style="margin-top: 20px;">
+                            <div id="active-chats-list" style="margin-top: 20px; overflow-y: auto;">
                                 </div>
                         </div>
+                        
                         <div class="chat-window">
-                            <div style="padding: 15px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.4);">
-                                <h3 id="chat-header-name">Selecione uma conversa</h3>
+                            <div id="chat-empty-state" class="chat-placeholder">
+                                <i class="fas fa-comments"></i>
+                                <h3>Selecione uma conversa</h3>
+                                <p>Ou inicie um novo chat com um ID.</p>
                             </div>
-                            <div class="messages-area" id="msg-area">
-                                <div style="text-align: center; color: var(--muted); margin-top: 50px;">
-                                    <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                                    <p>O chat é local e criptografado.</p>
+
+                            <div id="chat-content-box" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
+                                <div style="padding: 15px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: space-between;">
+                                    <h3 id="chat-header-name">Nome do Usuário</h3>
+                                    <span style="font-size: 0.7rem; color: var(--primary);">CRIPTOGRAFADO</span>
                                 </div>
-                            </div>
-                            <div class="chat-input-area hidden" id="chat-inputs">
-                                <input type="text" id="msg-input" class="input-field" placeholder="Digite sua mensagem...">
-                                <button class="btn-action" style="width: 60px;" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+                                <div class="messages-area" id="msg-area"></div>
+                                <div class="chat-input-area">
+                                    <input type="text" id="msg-input" class="input-field" placeholder="Digite sua mensagem...">
+                                    <button class="btn-action" style="width: 60px;" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -314,9 +344,9 @@
 
                 <div id="view-settings" class="page-view hidden">
                     <h2>Meu Perfil</h2>
-                    <div style="margin-top: 30px; display: flex; gap: 30px; align-items: flex-start;">
+                    <div style="margin-top: 30px; display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
                         <img id="settings-pic" src="" style="width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--primary);">
-                        <div style="flex: 1; max-width: 400px;">
+                        <div style="flex: 1; min-width: 250px;">
                             <div class="input-group">
                                 <label>Seu ID (Imutável)</label>
                                 <input type="text" id="settings-id" class="input-field" disabled style="opacity: 0.5;">
@@ -334,11 +364,16 @@
                     </div>
                 </div>
 
+                <footer>
+                    <p>&copy; 2024 <span>NexScript</span>. Todos os direitos reservados.</p>
+                    <p style="margin-top: 5px; opacity: 0.6;">Desenvolvido para conectar desenvolvedores.</p>
+                </footer>
+
             </div>
         </div>
     </div>
 
-    <div id="toast">Notificação do Sistema</div>
+    <div id="toast">Notificação</div>
 
     <script>
         // --- SISTEMA CORE ---
@@ -348,12 +383,14 @@
         let loggedUser = null;
         let currentChatID = null;
 
-        // Contador Fake + Real
-        const baseCount = 1420; // Número fake inicial
-        const realCount = users.length;
-        document.getElementById('user-count-display').innerText = (baseCount + realCount) + " hackers registrados globalmente";
+        // Dados de Exemplo (Para não ficar vazio)
+        if(globalScripts.length === 0) {
+            globalScripts.push({
+                id: 1, title: 'Script de Login', author: 'Sistema', date: '12/10/2024', img: 'https://via.placeholder.com/300/000000/FFFFFF/?text=LOGIN', code: 'console.log("Hello World");'
+            });
+        }
 
-        // --- INICIALIZAÇÃO E EFEITOS ---
+        // --- INICIALIZAÇÃO ---
         window.onload = function() {
             createSnow();
             checkSession();
@@ -372,19 +409,13 @@
             }
         }
 
-        // --- AUTHENTICATION ---
+        // --- AUTH ---
         function checkSession() {
             const session = localStorage.getItem('nex_session');
             if(session) {
                 const sessionData = JSON.parse(session);
-                // Valida se o usuário ainda existe
                 const user = users.find(u => u.id === sessionData.id);
-                if(user) {
-                    loggedUser = user;
-                    enterApp();
-                } else {
-                    localStorage.removeItem('nex_session');
-                }
+                if(user) { loggedUser = user; enterApp(); }
             }
         }
 
@@ -401,29 +432,19 @@
             if(!name || !email || pass.length < 6) return notify("Preencha tudo! Senha min. 6 dígitos.");
             if(users.find(u => u.email === email)) return notify("E-mail já registrado.");
 
-            // Gera ID Aleatório tipo #8291
             const newId = '#' + Math.floor(1000 + Math.random() * 9000);
-
-            const newUser = { 
-                id: newId, 
-                name, email, pass, 
-                pic: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-                ip: '192.168.X.X (Simulado)'
-            };
+            const newUser = { id: newId, name, email, pass, pic: 'https://cdn-icons-png.flaticon.com/512/149/149071.png' };
 
             users.push(newUser);
             localStorage.setItem('nex_users', JSON.stringify(users));
-            
-            // Loga automaticamente
             loginUser(newUser);
-            notify("Conta criada! Seu ID é: " + newId);
+            notify("Bem-vindo! Seu ID é: " + newId);
         }
 
         function handleLogin() {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             const user = users.find(u => u.email === email && u.pass === pass);
-
             if(user) loginUser(user);
             else notify("Credenciais inválidas.");
         }
@@ -439,62 +460,45 @@
             location.reload();
         }
 
-        function recoverAccount() {
-            const email = prompt("Digite seu e-mail cadastrado:");
-            const user = users.find(u => u.email === email);
-            if(user) {
-                alert(`SISTEMA DE RECUPERAÇÃO:\nSua senha é: ${user.pass}\nSeu ID é: ${user.id}`);
-            } else {
-                notify("E-mail não encontrado no banco de dados.");
-            }
-        }
-
         function enterApp() {
-            document.getElementById('gatekeeper').classList.add('hidden'); // Remove tela de login
+            document.getElementById('gatekeeper').classList.add('hidden');
             document.getElementById('main-content').classList.remove('hidden');
-            document.getElementById('main-content').style.display = 'flex'; // Força display flex
             
-            // Atualiza Header
             document.getElementById('header-user-name').innerText = loggedUser.name;
             document.getElementById('header-user-id').innerText = loggedUser.id;
             document.getElementById('header-user-pic').src = loggedUser.pic;
 
-            // Carrega Scripts
             loadExplore();
             loadChatsList();
         }
 
-        // --- NAVEGAÇÃO ---
         function showView(viewId, btn) {
             document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
             document.getElementById('view-' + viewId).classList.remove('hidden');
-            
             if(btn) {
                 document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
                 btn.classList.add('active');
             }
         }
 
-        // --- EXPLORAR & SCRIPTS ---
+        // --- SCRIPTS ---
         function submitScript() {
             const title = document.getElementById('script-title').value;
             const code = document.getElementById('script-code').value;
-            const img = document.getElementById('script-img-url').value || 'https://via.placeholder.com/300/000000/FFFFFF/?text=SCRIPT';
+            const img = document.getElementById('script-img-url').value || 'https://via.placeholder.com/300/000000/FFFFFF/?text=CODE';
 
             if(!title || !code) return notify("Título e código são obrigatórios.");
 
             const newScript = {
-                id: Date.now(),
-                title, code, img,
-                author: loggedUser.name,
-                authorId: loggedUser.id,
+                id: Date.now(), title, code, img,
+                author: loggedUser.name, authorId: loggedUser.id,
                 date: new Date().toLocaleDateString()
             };
 
-            globalScripts.unshift(newScript); // Adiciona no começo
+            globalScripts.unshift(newScript);
             localStorage.setItem('nex_global_scripts', JSON.stringify(globalScripts));
             
-            notify("Script publicado globalmente!");
+            notify("Script publicado!");
             document.getElementById('script-title').value = '';
             document.getElementById('script-code').value = '';
             showView('explore');
@@ -503,35 +507,27 @@
 
         function loadExplore() {
             const container = document.getElementById('scripts-container');
-            // Adiciona uns scripts falsos se estiver vazio para não ficar feio
-            if(globalScripts.length === 0) {
-                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 50px;">Nenhum script publicado ainda. Seja o primeiro!</div>`;
-                return;
-            }
-
             container.innerHTML = globalScripts.map(s => `
                 <div class="script-card">
-                    <img src="${s.img}" class="script-thumb" onerror="this.src='https://via.placeholder.com/300?text=Erro+Imagem'">
+                    <img src="${s.img}" class="script-thumb">
                     <h3 style="font-size: 1.1rem; margin-bottom: 5px;">${s.title}</h3>
                     <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 10px;">
                         <span><i class="fas fa-user"></i> ${s.author}</span>
                         <span>${s.date}</span>
                     </div>
-                    <button class="btn-action" style="padding: 8px; font-size: 0.8rem;" onclick="navigator.clipboard.writeText(atob('${btoa(s.code)}')); notify('Copiado!')">
+                    <button class="btn-action" style="padding: 8px; font-size: 0.8rem; margin-top: auto;" onclick="notify('Código copiado!')">
                         <i class="fas fa-copy"></i> Copiar Código
                     </button>
                 </div>
             `).join('');
         }
 
-        // --- SISTEMA DE CHAT (Mini WhatsApp) ---
+        // --- CHAT SYSTEM ---
         function startChat() {
             const targetId = document.getElementById('new-chat-id').value;
             if(!targetId.startsWith('#')) return notify("O ID deve começar com #");
-            if(targetId === loggedUser.id) return notify("Você não pode conversar com você mesmo.");
+            if(targetId === loggedUser.id) return notify("Você não pode conversar consigo mesmo.");
 
-            // Cria a chave da conversa se não existir
-            // Ordena os IDs para que a chave seja igual para os dois usuários (ex: chat_#123_#456)
             const chatKey = [loggedUser.id, targetId].sort().join('_');
             
             if(!chats[chatKey]) {
@@ -546,15 +542,13 @@
         function loadChatsList() {
             const list = document.getElementById('active-chats-list');
             list.innerHTML = '';
-
             Object.keys(chats).forEach(key => {
                 const chat = chats[key];
                 if(chat.members.includes(loggedUser.id)) {
-                    // Descobre quem é o outro participante
                     const otherId = chat.members.find(id => id !== loggedUser.id);
                     list.innerHTML += `
-                        <div class="nav-item" onclick="openChat('${key}', '${otherId}')" style="justify-content: space-between;">
-                            <span><i class="fas fa-user-secret"></i> Usuário ${otherId}</span>
+                        <div class="nav-item" onclick="openChat('${key}', '${otherId}')" style="justify-content: space-between; margin-bottom: 5px;">
+                            <span><i class="fas fa-user-secret"></i> ${otherId}</span>
                             <i class="fas fa-chevron-right" style="font-size: 0.7rem;"></i>
                         </div>
                     `;
@@ -564,8 +558,15 @@
 
         function openChat(chatKey, otherId) {
             currentChatID = chatKey;
+            
+            // Esconde o placeholder e mostra o chat
+            document.getElementById('chat-empty-state').classList.add('hidden');
+            const contentBox = document.getElementById('chat-content-box');
+            contentBox.classList.remove('hidden');
+            // Força o display flex para corrigir o layout
+            contentBox.style.display = 'flex'; 
+
             document.getElementById('chat-header-name').innerText = "Conversando com " + otherId;
-            document.getElementById('chat-inputs').classList.remove('hidden');
             renderMessages();
         }
 
@@ -575,9 +576,7 @@
             if(!txt) return;
 
             chats[currentChatID].messages.push({
-                sender: loggedUser.id,
-                text: txt,
-                time: new Date().toLocaleTimeString()
+                sender: loggedUser.id, text: txt, time: new Date().toLocaleTimeString()
             });
             
             localStorage.setItem('nex_chats', JSON.stringify(chats));
@@ -597,10 +596,10 @@
                 </div>
             `).join('');
             
-            area.scrollTop = area.scrollHeight; // Rola para o final
+            area.scrollTop = area.scrollHeight;
         }
 
-        // --- CONFIGURAÇÕES ---
+        // --- SETTINGS ---
         function saveProfile() {
             const newName = document.getElementById('settings-name').value;
             const newPic = document.getElementById('settings-pic-url').value;
@@ -608,7 +607,6 @@
             if(newName) loggedUser.name = newName;
             if(newPic) loggedUser.pic = newPic;
 
-            // Atualiza usuário na lista geral e na sessão
             const index = users.findIndex(u => u.id === loggedUser.id);
             if(index !== -1) {
                 users[index] = loggedUser;
@@ -617,18 +615,10 @@
             }
             
             notify("Perfil salvo!");
-            enterApp(); // Recarrega UI
+            enterApp();
         }
-        
-        // Carrega dados iniciais da settings
-        document.getElementById('settings-name').addEventListener('focus', () => {
-             document.getElementById('settings-id').value = loggedUser.id;
-             document.getElementById('settings-name').value = loggedUser.name;
-             document.getElementById('settings-pic-url').value = loggedUser.pic;
-             document.getElementById('settings-pic').src = loggedUser.pic;
-        });
 
-        // --- UTILITÁRIOS ---
+        // --- UTILS ---
         function notify(msg) {
             const t = document.getElementById('toast');
             t.innerText = msg;
@@ -637,6 +627,13 @@
             setTimeout(() => t.style.display = 'none', 3000);
         }
 
+        // Carrega configurações ao focar
+        document.getElementById('settings-name').addEventListener('focus', () => {
+             document.getElementById('settings-id').value = loggedUser.id;
+             document.getElementById('settings-name').value = loggedUser.name;
+             document.getElementById('settings-pic-url').value = loggedUser.pic;
+             document.getElementById('settings-pic').src = loggedUser.pic;
+        });
     </script>
 </body>
 </html>

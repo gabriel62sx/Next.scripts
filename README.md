@@ -29,7 +29,7 @@
             position: relative;
         }
 
-        /* --- CORREÇÃO DO EFEITO DE NEVE (Não interfere no layout) --- */
+        /* --- CORREÇÃO DO EFEITO DE NEVE --- */
         #snow-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1; overflow: hidden;
@@ -101,7 +101,7 @@
 
         /* --- DASHBOARD --- */
         .dashboard-container {
-            display: flex; flex: 1; overflow: hidden; /* Importante para o scroll funcionar só no conteúdo */
+            display: flex; flex: 1; overflow: hidden;
         }
 
         .sidebar {
@@ -118,17 +118,27 @@
         .content-area {
             flex: 1; padding: 30px; overflow-y: auto; position: relative;
             display: flex; flex-direction: column;
+            /* Garante que o footer vá para o final se o conteúdo for pequeno */
+            min-height: 0; 
         }
 
-        /* --- FOOTER (NOVIDADE) --- */
+        /* --- PAGE VIEWS --- */
+        .page-view {
+            flex: 1; /* Ocupa o espaço disponível empurrando o footer */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- FOOTER CORRIGIDO --- */
         footer {
-            margin-top: auto; /* Empurra para o fundo */
+            margin-top: auto; /* Mágica do Flexbox: empurra para o fundo */
             padding-top: 40px;
             padding-bottom: 10px;
             border-top: 1px solid var(--border);
             color: var(--muted);
             font-size: 0.8rem;
             text-align: center;
+            width: 100%;
         }
         footer p span { color: var(--primary); font-weight: bold; }
 
@@ -160,9 +170,9 @@
         .script-card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .script-thumb { width: 100%; height: 150px; border-radius: 10px; margin-bottom: 12px; object-fit: cover; background: #111; }
 
-        /* --- CHAT CORRIGIDO (Flechas Azuis) --- */
+        /* --- CHAT --- */
         .chat-container { 
-            display: flex; height: calc(100vh - 140px); /* Altura fixa para não vazar */
+            display: flex; height: calc(100vh - 140px);
             gap: 20px; overflow: hidden;
         }
         .chat-list { 
@@ -174,10 +184,9 @@
             background: rgba(0,0,0,0.2); border-radius: 16px; 
             border: 1px solid var(--border); 
             overflow: hidden;
-            position: relative; /* Para centralizar o placeholder */
+            position: relative;
         }
         
-        /* Placeholder para quando não tem chat aberto */
         .chat-placeholder {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -324,7 +333,7 @@
                             <div id="chat-empty-state" class="chat-placeholder">
                                 <i class="fas fa-comments"></i>
                                 <h3>Selecione uma conversa</h3>
-                                <p>Ou inicie um novo chat com um ID.</p>
+                                <p>Ou inicie um novo chat com um ID existente.</p>
                             </div>
 
                             <div id="chat-content-box" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
@@ -522,12 +531,22 @@
             `).join('');
         }
 
-        // --- CHAT SYSTEM ---
+        // --- CHAT SYSTEM (CORRIGIDO: VALIDAÇÃO DE ID REAL) ---
         function startChat() {
-            const targetId = document.getElementById('new-chat-id').value;
+            let targetId = document.getElementById('new-chat-id').value.trim();
+            
             if(!targetId.startsWith('#')) return notify("O ID deve começar com #");
             if(targetId === loggedUser.id) return notify("Você não pode conversar consigo mesmo.");
 
+            // --- NOVA VERIFICAÇÃO REAL ---
+            // Verifica se o usuário existe na lista de usuários cadastrados
+            const targetUser = users.find(u => u.id === targetId);
+
+            if (!targetUser) {
+                return notify("Erro: Usuário não encontrado no sistema!");
+            }
+
+            // Se chegou aqui, o usuário existe. Cria a chave do chat.
             const chatKey = [loggedUser.id, targetId].sort().join('_');
             
             if(!chats[chatKey]) {
@@ -537,6 +556,7 @@
 
             loadChatsList();
             openChat(chatKey, targetId);
+            notify("Chat iniciado com sucesso!");
         }
 
         function loadChatsList() {
@@ -559,11 +579,9 @@
         function openChat(chatKey, otherId) {
             currentChatID = chatKey;
             
-            // Esconde o placeholder e mostra o chat
             document.getElementById('chat-empty-state').classList.add('hidden');
             const contentBox = document.getElementById('chat-content-box');
             contentBox.classList.remove('hidden');
-            // Força o display flex para corrigir o layout
             contentBox.style.display = 'flex'; 
 
             document.getElementById('chat-header-name').innerText = "Conversando com " + otherId;

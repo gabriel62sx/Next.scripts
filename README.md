@@ -1,450 +1,646 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NexScript | Plataforma</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Rajdhani:wght@700&family=Press+Start+2P&display=swap" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+--// [IMPERADOR] • LOADING SCREEN IMPERIAL (MODIFICADO: AZUL & PRETO) //--
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local CoreGui = game:GetService("CoreGui")
 
-    <style>
-        :root {
-            --bg: #050505;
-            --panel: #0f1115;
-            --primary: #3b82f6;
-            --primary-dark: #1d4ed8;
-            --accent: #00f0ff;
-            --text: #e2e8f0;
-            --muted: #64748b;
-            --border: rgba(59, 130, 246, 0.15);
-            --glass: rgba(15, 17, 21, 0.7);
-        }
+local Blur = Instance.new("BlurEffect")
+Blur.Size = 0
+Blur.Parent = Lighting
+TweenService:Create(Blur, TweenInfo.new(0.6), {Size = 18}):Play()
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+local LoadGui = Instance.new("ScreenGui")
+LoadGui.Name = "FuturoReiLoading"
+LoadGui.IgnoreGuiInset = true
+LoadGui.Parent = CoreGui
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh;
-            overflow: hidden; /* Garante tela cheia sem scroll na body */
-            display: flex;
-            flex-direction: column;
-        }
+local LoadMain = Instance.new("Frame", LoadGui)
+LoadMain.Size = UDim2.fromScale(1,1)
+LoadMain.BackgroundColor3 = Color3.fromRGB(8,8,8)
+LoadMain.BackgroundTransparency = 0.25 
 
-        /* Efeito de Neve */
-        #snow-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
+local Logo = Instance.new("TextLabel", LoadMain)
+Logo.Size = UDim2.new(0,420,0,60)
+Logo.Position = UDim2.fromScale(0.5,0.42)
+Logo.AnchorPoint = Vector2.new(0.5,0.5)
+Logo.BackgroundTransparency = 1
+Logo.Text = "🥶!MPERADO4🥶"
+Logo.Font = Enum.Font.GothamBlack
+Logo.TextSize = 42
+Logo.TextColor3 = Color3.fromRGB(0, 140, 255) -- >> AZUL
+Logo.TextTransparency = 1
 
-        .snowflake {
-            position: absolute;
-            top: -10px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: fall linear infinite;
-        }
+local Sub = Instance.new("TextLabel", LoadMain)
+Sub.Size = UDim2.new(0,420,0,26)
+Sub.Position = UDim2.fromScale(0.5,0.48)
+Sub.AnchorPoint = Vector2.new(0.5,0.5)
+Sub.BackgroundTransparency = 1
+Sub.Text = "REI ESTÁ DE VOLTA"
+Sub.Font = Enum.Font.GothamMedium
+Sub.TextSize = 15
+Sub.TextColor3 = Color3.fromRGB(200,200,200)
+Sub.TextTransparency = 1
 
-        @keyframes fall {
-            to { transform: translateY(105vh); }
-        }
+local Phrase = Instance.new("TextLabel", LoadMain)
+Phrase.Size = UDim2.new(0,420,0,22)
+Phrase.Position = UDim2.fromScale(0.5,0.56)
+Phrase.AnchorPoint = Vector2.new(0.5,0.5)
+Phrase.BackgroundTransparency = 1
+Phrase.Text = ""
+Phrase.Font = Enum.Font.GothamSemibold
+Phrase.TextSize = 14
+Phrase.TextColor3 = Color3.fromRGB(220,220,220)
+Phrase.TextTransparency = 1
 
-        /* TELA DE LOGIN (Gatekeeper) */
-        #gatekeeper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-image: radial-gradient(circle at 50% 40%, #111b33 0%, #000 80%);
-        }
+local BarBg = Instance.new("Frame", LoadMain)
+BarBg.Size = UDim2.new(0,380,0,6)
+BarBg.Position = UDim2.fromScale(0.5,0.62)
+BarBg.AnchorPoint = Vector2.new(0.5,0.5)
+BarBg.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
-        .auth-card {
-            background: rgba(15, 17, 21, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            padding: 40px;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-            z-index: 10;
-            position: relative;
-            animation: fadeIn 1s ease;
-        }
+local Bar = Instance.new("Frame", BarBg)
+Bar.Size = UDim2.new(0,0,1,0)
+Bar.BackgroundColor3 = Color3.fromRGB(0, 140, 255) -- >> AZUL
 
-        .auth-card h2 {
-            margin-bottom: 20px;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.6rem;
-            color: white;
-        }
+Instance.new("UICorner", BarBg).CornerRadius = UDim.new(1,0)
+Instance.new("UICorner", Bar).CornerRadius = UDim.new(1,0)
 
-        .input-group { margin-bottom: 15px; }
-        .input-field {
-            width: 100%;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid #1e293b;
-            border-radius: 10px;
-            color: white;
-            outline: none;
-            transition: 0.3s;
-        }
-        .input-field:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
-        }
+TweenService:Create(Logo, TweenInfo.new(0.6), {TextTransparency = 0}):Play()
+TweenService:Create(Sub, TweenInfo.new(0.6), {TextTransparency = 0}):Play()
 
-        .btn-action {
-            width: 100%;
-            padding: 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-        .btn-action:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
+local phrases = {"ABRINDO CAMINHO PRO REI", "O NOSSO REI VOLTOU", "O REI CHEGOU"}
+task.spawn(function()
+    for i, text in ipairs(phrases) do
+        Phrase.TextTransparency = 1
+        Phrase.Text = text
+        TweenService:Create(Phrase, TweenInfo.new(0.4), {TextTransparency = 0}):Play()
+        task.wait(1.3)
+    end
+end)
 
-        /* CONTEÚDO PRINCIPAL */
-        #main-content {
-            flex: 1;
-            display: flex; /* Sidebar na esquerda, conteudo na direita */
-            position: relative;
-            z-index: 5;
-            height: 100vh;
-        }
+TweenService:Create(Bar, TweenInfo.new(3.8, Enum.EasingStyle.Quad), {Size = UDim2.new(1,0,1,0)}):Play()
 
-        /* Sidebar Simplificada */
-        .sidebar {
-            width: 80px; /* Mais fina para dar destaque ao conteudo */
-            background: rgba(10, 12, 16, 0.8);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-            flex-shrink: 0;
-        }
+task.wait(4.2)
 
-        .nav-item {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            color: var(--muted);
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
+TweenService:Create(LoadMain, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+TweenService:Create(Logo, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
+TweenService:Create(Sub, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
+TweenService:Create(Phrase, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
+TweenService:Create(Blur, TweenInfo.new(0.5), {Size = 0}):Play()
 
-        .nav-item:hover, .nav-item.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        }
+task.delay(0.6, function()
+    LoadGui:Destroy()
+    Blur:Destroy()
+end)
 
-        /* Área de Conteúdo */
-        .content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto; /* Scroll apenas aqui se precisar */
-            position: relative;
-            background: radial-gradient(circle at top right, #0a101f 0%, #050505 60%);
-        }
+--// INÍCIO DO SCRIPT PRINCIPAL //--
 
-        .container-padding {
-            padding: 40px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local StarterGui = game:GetService("StarterGui")
+local VirtualUser = game:GetService("VirtualUser")
 
-        /* Estilo do Card do Script */
-        .script-card {
-            background: #0a0c10;
-            border-radius: 16px;
-            padding: 25px;
-            border: 1px solid #1e293b;
-            transition: 0.3s;
-            max-width: 600px;
-            margin: 0 auto 50px auto; /* Centralizado horizontalmente */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+local LP = Players.LocalPlayer
+local Mouse = LP:GetMouse()
+local Camera = workspace.CurrentCamera
 
-        .script-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
-        }
+if CoreGui:FindFirstChild("FuturoReiSupremo") then CoreGui.FuturoReiSupremo:Destroy() end
 
-        .script-thumb {
-            width: 100%;
-            height: 200px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            object-fit: cover;
-            background: #111;
-            border: 1px solid #333;
-        }
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FuturoReiSupremo"
+ScreenGui.Parent = CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-        .script-info h3 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.8rem;
-            color: white;
-            margin-bottom: 5px;
-        }
+local CrownIconID = "rbxassetid://14567278958" 
 
-        .script-password {
-            background: rgba(0, 240, 255, 0.05);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            padding: 10px;
-            border-radius: 8px;
-            margin: 15px 0;
-            color: var(--accent);
-            font-family: monospace;
-        }
+-- // PALETA DE CORES: MUDADO PARA AZUL // --
+local Colors = {
+    Bg = Color3.fromRGB(8, 8, 8),
+    DarkBg = Color3.fromRGB(15, 15, 15),
+    Accent = Color3.fromRGB(0, 140, 255), -- AZUL VIBRANTE
+    White = Color3.fromRGB(255, 255, 255),
+    Text = Color3.fromRGB(240, 240, 240),
+    Gray = Color3.fromRGB(80, 80, 80)
+}
 
-        /* ESTILO PIXEL ART */
-        .pixel-message-container {
-            text-align: center;
-            margin-top: auto; /* Empurra para baixo se tiver espaço, mas fica abaixo do script */
-            margin-bottom: 50px;
-            animation: pulse 2s infinite;
-        }
+local function MakeDraggable(obj, dragObj)
+    local dragging, dragStart, startPos
+    dragObj.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = obj.Position
+        end
+    end)
+    dragObj.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+    end)
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - dragStart
+            TweenService:Create(obj, TweenInfo.new(0.05), {
+                Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            }):Play()
+        end
+    end)
+end
 
-        .pixel-big {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 2rem; /* Grande */
-            color: var(--accent);
-            text-shadow: 4px 4px 0px #000, 0 0 20px var(--primary);
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
+local function CreateCorner(parent, rad)
+    local c = Instance.new("UICorner", parent)
+    c.CornerRadius = UDim.new(0, rad)
+    return c
+end
 
-        .pixel-small {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1rem;
-            color: #fff;
-            opacity: 0.8;
-            text-shadow: 2px 2px 0px #000;
-        }
+local function Notify(title, msg)
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = title;
+            Text = msg;
+            Icon = CrownIconID; 
+            Duration = 3;
+        })
+    end)
+end
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
+local MiniButton = Instance.new("TextButton")
+MiniButton.Name = "MiniButton"
+MiniButton.Size = UDim2.new(0, 60, 0, 60)
+MiniButton.Position = UDim2.new(0.02, 0, 0.5, 0)
+MiniButton.BackgroundColor3 = Colors.Bg
+MiniButton.Text = ""
+MiniButton.Parent = ScreenGui
+CreateCorner(MiniButton, 30)
+MakeDraggable(MiniButton, MiniButton)
 
-        footer {
-            background: var(--panel);
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            color: var(--muted);
-            font-size: 0.8rem;
-            font-family: 'Rajdhani', sans-serif;
-            letter-spacing: 1px;
-        }
+local MiniStroke = Instance.new("UIStroke", MiniButton)
+MiniStroke.Color = Colors.Accent
+MiniStroke.Thickness = 3
+MiniStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-        /* Utilitarios */
-        .hidden { display: none !important; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Responsivo para celular */
-        @media (max-width: 768px) {
-            .pixel-big { font-size: 1.2rem; }
-            .sidebar { width: 50px; }
-            .script-card { width: 100%; }
-        }
-    </style>
-</head>
-<body>
-    <div id="snow-container"></div>
+spawn(function()
+    while MiniButton.Parent do
+        TweenService:Create(MiniStroke, TweenInfo.new(0.8), {Color = Colors.Accent}):Play()
+        wait(0.8)
+        TweenService:Create(MiniStroke, TweenInfo.new(0.8), {Color = Colors.Bg}):Play()
+        wait(0.8)
+    end
+end)
 
-    <div id="gatekeeper">
-        <div class="auth-card" id="login-box">
-            <h2 style="text-align: center;">ACESSO AO SISTEMA</h2>
-            <div class="input-group">
-                <input type="email" id="auth-email" class="input-field" placeholder="E-mail" />
-            </div>
-            <div class="input-group">
-                <input type="password" id="auth-pass" class="input-field" placeholder="Senha" />
-            </div>
-            <button class="btn-action" onclick="handleLogin()">ENTRAR</button>
-            <div style="margin-top:15px; text-align:center; font-size:0.8rem;">
-                <a href="#" onclick="toggleAuth(true)" style="color:var(--primary);">Criar Conta</a>
-            </div>
-        </div>
+local MiniIcon = Instance.new("ImageLabel", MiniButton)
+MiniIcon.Size = UDim2.new(0, 35, 0, 35)
+MiniIcon.Position = UDim2.new(0.5, -17.5, 0.5, -17.5)
+MiniIcon.BackgroundTransparency = 1
+MiniIcon.Image = CrownIconID
+MiniIcon.ImageColor3 = Colors.White 
 
-        <div class="auth-card hidden" id="register-box">
-            <h2 style="text-align: center;">REGISTRO</h2>
-            <div class="input-group">
-                <input type="text" id="reg-name" class="input-field" placeholder="Nome" />
-            </div>
-            <div class="input-group">
-                <input type="email" id="reg-email" class="input-field" placeholder="E-mail" />
-            </div>
-            <div class="input-group">
-                <input type="password" id="reg-pass" class="input-field" placeholder="Senha" />
-            </div>
-            <button class="btn-action" onclick="handleRegister()">CRIAR E ENTRAR</button>
-            <p style="margin-top:10px; text-align:center; font-size:0.8rem;">
-                <a href="#" onclick="toggleAuth(false)" style="color:var(--muted);">Voltar</a>
-            </p>
-        </div>
-    </div>
+local Main = Instance.new("Frame")
+Main.Name = "MainFrame"
+Main.Size = UDim2.new(0, 720, 0, 480)
+Main.Position = UDim2.new(0.5, -360, 0.5, -240)
+Main.BackgroundColor3 = Colors.Bg
+Main.ClipsDescendants = true
+Main.Parent = ScreenGui
+Main.Visible = false
+CreateCorner(Main, 10)
 
-    <div id="main-content" class="hidden">
-        <div class="sidebar">
-            <div class="nav-item active" title="Explorar">
-                <i class="fas fa-terminal"></i>
-            </div>
-            <div style="flex:1"></div>
-            <div class="nav-item" onclick="handleLogout()" title="Sair" style="color: #ff4444;">
-                <i class="fas fa-power-off"></i>
-            </div>
-        </div>
+local MainStroke = Instance.new("UIStroke", Main)
+MainStroke.Color = Colors.Accent
+MainStroke.Thickness = 2
 
-        <div class="content-area">
-            <div class="container-padding">
-                <h1 style="font-family: 'Rajdhani'; font-size: 3rem; margin-bottom: 30px; text-align: center; color: white; letter-spacing: 2px;">
-                    NEXSCRIPT <span style="color:var(--primary);">HUB</span>
-                </h1>
+local Grid = Instance.new("ImageLabel", Main)
+Grid.Size = UDim2.new(1, 0, 1, 0)
+Grid.Image = "rbxassetid://300138338"
+Grid.ImageColor3 = Colors.White
+Grid.ImageTransparency = 0.97
+Grid.TileSize = UDim2.new(0, 30, 0, 30)
+Grid.BackgroundTransparency = 1
 
-                <div class="script-card">
-                    <img src="https://via.placeholder.com/600x320/0f1115/3b82f6?text=IMPERADOR+HUB+V1" class="script-thumb" onerror="this.src='https://via.placeholder.com/600x320?text=Script'">
-                    <div class="script-info">
-                        <h3>IMPERADOR HUB v1</h3>
-                        <p style="color:var(--muted); font-size:0.9rem;">O melhor script para farm automático.</p>
-                        
-                        <div class="script-password">
-                            <i class="fas fa-key"></i> Senha: <strong>imperio</strong>
-                        </div>
-                        
-                        <button class="btn-action" onclick="copyScript()">
-                            <i class="fas fa-copy"></i> COPIAR SCRIPT
-                        </button>
-                    </div>
-                </div>
+local isOpen = false
+MiniButton.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    if isOpen then
+        Main.Visible = true
+        Main.Size = UDim2.new(0, 0, 0, 0)
+        TweenService:Create(Main, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 720, 0, 480), BackgroundTransparency = 0}):Play()
+    else
+        local closeTween = TweenService:Create(Main, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {Size = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1})
+        closeTween:Play()
+        closeTween.Completed:Connect(function() Main.Visible = false end)
+    end
+end)
 
-                <div class="pixel-message-container">
-                    <div class="pixel-big">
-                        EM BREVE<br>NOVOS SCRIPTS
-                    </div>
-                    <div class="pixel-small">
-                        @gabriel.futury
-                    </div>
-                </div>
-            </div>
+local Header = Instance.new("Frame", Main)
+Header.Size = UDim2.new(1, 0, 0, 55)
+Header.BackgroundColor3 = Colors.DarkBg
+CreateCorner(Header, 10)
+MakeDraggable(Main, Header)
 
-            <footer>
-                © 2024 NexScript Platform - Developed by @gabriel.futury
-            </footer>
-        </div>
-    </div>
+local Title = Instance.new("TextLabel", Header)
+Title.Text = "O REI ESTÁ DE VOLTA"
+Title.TextColor3 = Colors.White
+Title.Font = Enum.Font.GothamBlack
+Title.TextSize = 24
+Title.Size = UDim2.new(0, 400, 1, 0)
+Title.Position = UDim2.new(0, 20, 0, 0)
+Title.BackgroundTransparency = 1
+Title.TextXAlignment = Enum.TextXAlignment.Left
 
-    <script>
-        // Lógica Simplificada
-        let users = JSON.parse(localStorage.getItem('nex_users')) || [];
+spawn(function()
+    while Title.Parent do
+        Title.TextColor3 = Colors.White
+        wait(0.5)
+        Title.TextColor3 = Colors.Accent -- PISCA AZUL
+        wait(0.5)
+    end
+end)
 
-        window.onload = function () {
-            createSnow();
-            checkSession();
-        };
+local Sidebar = Instance.new("Frame", Main)
+Sidebar.Size = UDim2.new(0, 180, 1, -55)
+Sidebar.Position = UDim2.new(0, 0, 0, 55)
+Sidebar.BackgroundColor3 = Colors.DarkBg
 
-        function createSnow() {
-            const container = document.getElementById('snow-container');
-            for (let i = 0; i < 30; i++) {
-                const flake = document.createElement('div');
-                flake.className = 'snowflake';
-                flake.style.left = Math.random() * 100 + 'vw';
-                const size = Math.random() * 3 + 2;
-                flake.style.width = flake.style.height = size + 'px';
-                flake.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                flake.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(flake);
-            }
-        }
+local PageContainer = Instance.new("Frame", Main)
+PageContainer.Size = UDim2.new(1, -190, 1, -65)
+PageContainer.Position = UDim2.new(0, 190, 0, 60)
+PageContainer.BackgroundTransparency = 1
 
-        function toggleAuth(showRegister) {
-            document.getElementById('login-box').classList.toggle('hidden', showRegister);
-            document.getElementById('register-box').classList.toggle('hidden', !showRegister);
-        }
+local TabsList = Instance.new("UIListLayout", Sidebar)
+TabsList.Padding = UDim.new(0, 5)
+TabsList.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
-        function handleLogin() {
-            const email = document.getElementById('auth-email').value.trim();
-            const pass = document.getElementById('auth-pass').value;
-            const user = users.find(u => u.email === email && u.pass === pass);
-            if (user) loginUser(user);
-            else alert("Dados incorretos!");
-        }
+local function AddTab(name, icon)
+    local Btn = Instance.new("TextButton", Sidebar)
+    Btn.Size = UDim2.new(0.9, 0, 0, 38)
+    Btn.BackgroundColor3 = Colors.Bg
+    Btn.Text = (icon or "") .. "   " .. name
+    Btn.TextColor3 = Colors.Gray
+    Btn.Font = Enum.Font.GothamBold
+    Btn.TextSize = 13
+    Btn.TextXAlignment = Enum.TextXAlignment.Left
+    CreateCorner(Btn, 6)
+    local pad = Instance.new("UIPadding", Btn)
+    pad.PaddingLeft = UDim.new(0, 12)
 
-        function handleRegister() {
-            const name = document.getElementById('reg-name').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const pass = document.getElementById('reg-pass').value;
-            if(!name || !email || !pass) return alert("Preencha tudo.");
+    local Page = Instance.new("ScrollingFrame", PageContainer)
+    Page.Size = UDim2.new(1, 0, 1, 0)
+    Page.BackgroundTransparency = 1
+    Page.ScrollBarThickness = 2
+    Page.ScrollBarImageColor3 = Colors.Accent
+    Page.Visible = false
+    Instance.new("UIListLayout", Page).Padding = UDim.new(0, 8)
+    
+    Btn.MouseButton1Click:Connect(function()
+        for _, obj in pairs(Sidebar:GetChildren()) do if obj:IsA("TextButton") then obj.BackgroundColor3 = Colors.Bg obj.TextColor3 = Colors.Gray end end
+        for _, p in pairs(PageContainer:GetChildren()) do p.Visible = false end
+        Page.Visible = true
+        Btn.BackgroundColor3 = Colors.Accent
+        Btn.TextColor3 = Colors.White
+    end)
+    return Page
+end
+
+local function AddButton(page, text, func)
+    local B = Instance.new("TextButton", page)
+    B.Size = UDim2.new(0.98, 0, 0, 35)
+    B.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    B.Text = text
+    B.TextColor3 = Colors.White
+    B.Font = Enum.Font.GothamSemibold
+    B.TextSize = 13
+    CreateCorner(B, 5)
+    local Stroke = Instance.new("UIStroke", B)
+    Stroke.Color = Colors.White
+    Stroke.Thickness = 1
+    Stroke.Transparency = 0.8
+    B.MouseButton1Click:Connect(function() task.spawn(func) end)
+    return B
+end
+
+local function AddInputRow(page, btnText, placeholder, func)
+    local Container = Instance.new("Frame", page)
+    Container.Size = UDim2.new(0.98, 0, 0, 35)
+    Container.BackgroundTransparency = 1
+    
+    local Layout = Instance.new("UIListLayout", Container)
+    Layout.FillDirection = Enum.FillDirection.Horizontal
+    Layout.Padding = UDim.new(0, 5)
+
+    local B = Instance.new("TextButton", Container)
+    B.Size = UDim2.new(0.7, -5, 1, 0)
+    B.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    B.Text = btnText
+    B.TextColor3 = Colors.White
+    B.Font = Enum.Font.GothamSemibold
+    B.TextSize = 13
+    CreateCorner(B, 5)
+    Instance.new("UIStroke", B).Color = Colors.White
+    B.UIStroke.Transparency = 0.8
+
+    local T = Instance.new("TextBox", Container)
+    T.Size = UDim2.new(0.3, 0, 1, 0)
+    T.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    T.PlaceholderText = placeholder
+    T.Text = ""
+    T.TextColor3 = Colors.White
+    T.Font = Enum.Font.GothamMedium
+    T.TextSize = 13
+    CreateCorner(T, 5)
+    Instance.new("UIStroke", T).Color = Colors.Accent
+    T.UIStroke.Transparency = 0.5
+
+    B.MouseButton1Click:Connect(function() task.spawn(function() func(T.Text) end) end)
+end
+
+local function AddLabel(page, text)
+    local L = Instance.new("TextLabel", page)
+    L.Size = UDim2.new(0.98, 0, 0, 25)
+    L.BackgroundTransparency = 1
+    L.Text = ":: " .. string.upper(text) .. " ::"
+    L.TextColor3 = Colors.Accent
+    L.Font = Enum.Font.GothamBlack
+    L.TextSize = 11
+end
+
+-- ABA ADMIN
+local AdminTab = AddTab("LUGAR DO REI", "🌊")
+AddLabel(AdminTab, "Bibliotecas Principais")
+AddButton(AdminTab, "Infinite Yield (+400 cmds)", function() loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))() end)
+AddButton(AdminTab, "CMD-X (Admin Alternativo)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source", true))() end)
+AddButton(AdminTab, "Nameless Admin (FE)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source"))() end)
+AddLabel(AdminTab, "Exploração")
+AddButton(AdminTab, "Dark Dex V3", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua"))() end)
+AddButton(AdminTab, "Simple Spy V2 (Remotes)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/78n/SimpleSpy/main/SimpleSpySource.lua"))() end)
+
+-- ABA JOGADOR
+local PlayTab = AddTab("Jogador", "🌊")
+AddLabel(PlayTab, "Atributos customizáveis")
+
+-- GOD MODE
+AddButton(PlayTab, "GOD MODE (Vida Infinita)", function()
+    pcall(function()
+        if LP.Character and LP.Character:FindFirstChild("Humanoid") then
+            local Humanoid = LP.Character.Humanoid
+            Humanoid.MaxHealth = math.huge
+            Humanoid.Health = math.huge
+            if not LP.Character:FindFirstChild("GodField") then
+                local ff = Instance.new("ForceField", LP.Character)
+                ff.Name = "GodField"
+                ff.Visible = true 
+            end
+            Notify("GOD MODE", "Ativado! Você é imortal.")
+            spawn(function()
+                while LP.Character and LP.Character:FindFirstChild("Humanoid") do
+                    LP.Character.Humanoid.Health = LP.Character.Humanoid.MaxHealth
+                    wait(0.5)
+                end
+            end)
+        end
+    end)
+end)
+
+AddInputRow(PlayTab, "Definir Velocidade", "Num...", function(val) 
+    local num = tonumber(val)
+    if num and LP.Character and LP.Character:FindFirstChild("Humanoid") then
+        LP.Character.Humanoid.WalkSpeed = num
+    end
+end)
+
+AddInputRow(PlayTab, "Definir Pulo", "Num...", function(val) 
+    local num = tonumber(val)
+    if num and LP.Character and LP.Character:FindFirstChild("Humanoid") then
+        LP.Character.Humanoid.JumpPower = num
+    end
+end)
+
+AddLabel(PlayTab, "Outros")
+AddButton(PlayTab, "Anti-AFK", function() 
+    LP.Idled:connect(function() VirtualUser:CaptureController() VirtualUser:ClickButton2(Vector2.new()) end)
+    Notify("Anti-AFK", "Ativado.")
+end)
+AddButton(PlayTab, "Noclip (Atravessar)", function()
+    RunService.Stepped:Connect(function() for _,v in pairs(LP.Character:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end end)
+    Notify("Noclip", "Ativado.")
+end)
+AddButton(PlayTab, "Fly GUI V3", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
+
+-- ABA TELEPORTES
+local TpTab = AddTab("Teleportes", "🌊")
+AddLabel(TpTab, "Teleporte Rápido")
+
+AddButton(TpTab, "Click TP (Ctrl + Click)", function()
+    local Mouse = LP:GetMouse()
+    Mouse.Button1Down:Connect(function()
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) and Mouse.Target then
+            LP.Character:MoveTo(Mouse.Hit.p)
+        end
+    end)
+    Notify("Teleporte", "Segure CTRL e Clique para teleportar.")
+end)
+
+AddInputRow(TpTab, "TP para Player", "Nome...", function(txt)
+    if txt == "" then return end
+    for _, p in pairs(Players:GetPlayers()) do
+        if string.sub(string.lower(p.Name), 1, string.len(txt)) == string.lower(txt) or string.sub(string.lower(p.DisplayName), 1, string.len(txt)) == string.lower(txt) then
+            if p.Character and p.Character:FindFirstChild("HumanoidRootPart") and LP.Character then
+                LP.Character.HumanoidRootPart.CFrame = p.Character.HumanoidRootPart.CFrame
+                Notify("Sucesso", "Teleportado para: " .. p.Name)
+                return
+            end
+        end
+    end
+    Notify("Erro", "Jogador não encontrado.")
+end)
+
+
+-- ABA COMBATE
+local CombatTab = AddTab("Combate", "🌊")
+AddLabel(CombatTab, "Vantagem Tática")
+
+_G.AimbotActive = false
+AddButton(CombatTab, "AIMBOT (LIGAR/DESLIGAR)", function()
+    _G.AimbotActive = not _G.AimbotActive
+    if _G.AimbotActive then
+        Notify("Combate", "Aimbot Carregado!")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-V2/main/Resources/Scripts/Main.lua"))()
+    else
+        if _G.Aimbot and _G.Aimbot.Settings then _G.Aimbot.Settings.Enabled = false end
+        Notify("Combate", "Aimbot Desligado.")
+    end
+end)
+
+_G.HitboxActive = false
+AddButton(CombatTab, "Hitbox Gigante + Wallhack (Toggle)", function()
+    _G.HitboxActive = not _G.HitboxActive
+    if _G.HitboxActive then
+        Notify("Combate", "Hitbox & Visão Ativadas!")
+        RunService.RenderStepped:Connect(function()
+            if not _G.HitboxActive then return end
+            for _, v in pairs(Players:GetPlayers()) do
+                if v ~= LP and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                    v.Character.HumanoidRootPart.Size = Vector3.new(15, 15, 15)
+                    v.Character.HumanoidRootPart.Transparency = 1
+                    if not v.Character:FindFirstChild("ReiHL") then
+                        local hl = Instance.new("Highlight", v.Character)
+                        hl.Name = "ReiHL"
+                        hl.FillColor = Colors.Accent
+                        hl.OutlineColor = Colors.White
+                        hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    end
+                end
+            end
+        end)
+    else
+        Notify("Combate", "Desativado.")
+        for _, v in pairs(Players:GetPlayers()) do
+            if v.Character and v.Character:FindFirstChild("ReiHL") then v.Character.ReiHL:Destroy() end
+            if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then v.Character.HumanoidRootPart.Size = Vector3.new(2,2,1) end
+        end
+    end
+end)
+AddButton(CombatTab, "TriggerBot (Auto Click)", function() spawn(function() while wait(0.1) do if Mouse.Target and Mouse.Target.Parent:FindFirstChild("Humanoid") then mouse1click() end end end) end)
+
+-- ABA VISUAIS
+local VisTab = AddTab("Visuais", "🌊")
+AddLabel(VisTab, "Estilo")
+AddButton(VisTab, "Unnamed ESP", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ic3w0lf22/Unnamed-ESP/master/Main.lua"))() end)
+AddButton(VisTab, "Fullbright (Luz)", function() Lighting.Brightness = 2 Lighting.ClockTime = 14 Lighting.GlobalShadows = false end)
+AddButton(VisTab, "Raio-X", function() for _,v in pairs(workspace:GetDescendants()) do if v:IsA("BasePart") then v.Transparency = 0.5 end end end)
+
+-- ABA JOGOS/HUBS
+local HubTab = AddTab("Script", "🌊")
+AddButton(HubTab, "VG Hub (Multi-Jogos)", function() loadstring(game:HttpGet('https://raw.githubusercontent.com/1201n0001/V.G-Hub/main/V.G%20Hub'))() end)
+AddButton(HubTab, "Owl Hub (FPS)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))() end)
+AddButton(HubTab, "Blox Fruits (Hoho)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))() end)
+AddButton(HubTab, "Brookhaven (Ice)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/IceMael7/NewIceHub/main/Brookhaven"))() end)
+AddButton(HubTab, "Doors (Black King)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/KINGHUB01/BlackKing-obf/main/Doors%20Blackking%20And%20Bobo"))() end)
+
+-- ABA MISC
+local MiscTab = AddTab("Misc", "🌊")
+AddLabel(MiscTab, "Música & Caos")
+
+AddInputRow(MiscTab, "Tocar Música (Som)", "ID do Som...", function(id)
+    if id == "" then return end
+    local Sound = Instance.new("Sound", workspace)
+    Sound.Name = "FuturoReiSound"
+    Sound.SoundId = "rbxassetid://" .. id
+    Sound.Volume = 5
+    Sound.Looped = true
+    Sound:Play()
+    Notify("Música", "Tocando ID: " .. id)
+end)
+
+AddButton(MiscTab, "Parar Música", function()
+    for _, s in pairs(workspace:GetChildren()) do
+        if s.Name == "FuturoReiSound" then s:Destroy() end
+    end
+end)
+
+AddInputRow(MiscTab, "Chat Rainbow (RichText)", "Sua msg...", function(msg)
+    if msg == "" then return end
+    
+    local function toHex(color)
+        return string.format("#%02X%02X%02X", color.R * 255, color.G * 255, color.B * 255)
+    end
+    
+    local coloredMsg = ""
+    local freq = 0.5
+    
+    for i = 1, #msg do
+        local r = math.sin(freq * i + 0) * 127 + 128
+        local g = math.sin(freq * i + 2) * 127 + 128
+        local b = math.sin(freq * i + 4) * 127 + 128
+        local hex = toHex(Color3.fromRGB(r, g, b))
+        coloredMsg = coloredMsg .. '<font color="' .. hex .. '">' .. string.sub(msg, i, i) .. '</font>'
+    end
+    
+    local RS = game:GetService("ReplicatedStorage")
+    if RS:FindFirstChild("DefaultChatSystemChatEvents") then
+        RS.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(coloredMsg, "All")
+        Notify("Chat Rainbow", "Enviado!")
+    else
+        Notify("Erro", "Chat incompatível com script.")
+    end
+end)
+
+AddButton(MiscTab, "Fling Universal (Derrubar)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe/main/obf_rf6iQURzs1syxgblQD9UJU8tJAmcC017Cn373866XC747y26hOOi86F87C55532c.lua.txt"))() end)
+
+AddButton(MiscTab, "Spinbot (Girar Rápido)", function()
+    local s = Instance.new("BodyAngularVelocity", LP.Character.HumanoidRootPart)
+    s.Name = "SpinBot"
+    s.AngularVelocity = Vector3.new(0, 100, 0)
+    s.MaxTorque = Vector3.new(0, math.huge, 0)
+end)
+
+AddButton(MiscTab, "Parar Spinbot", function()
+    if LP.Character and LP.Character.HumanoidRootPart:FindFirstChild("SpinBot") then
+        LP.Character.HumanoidRootPart.SpinBot:Destroy()
+    end
+end)
+
+AddButton(MiscTab, "Ficar Invisível", function()
+    if LP.Character then LP.Character.HumanoidRootPart.CFrame = CFrame.new(0,9e5,0) wait(0.2) LP.Character.HumanoidRootPart.Anchored = true end
+    Notify("Troll", "Invisível.")
+end)
+
+-- ABA SERVIDOR
+local ServTab = AddTab("Servidor", "🌊")
+AddButton(ServTab, "Trocar de Server (Hop)", function() 
+    local x={} for _,v in ipairs(HttpService:JSONDecode(game:HttpGetAsync("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100")).data) do if type(v)=="table" and v.maxPlayers>v.playing and v.id~=game.JobId then x[#x+1]=v.id end end
+    if #x>0 then TeleportService:TeleportToPlaceInstance(game.PlaceId, x[math.random(1,#x)], LP) end
+end)
+AddButton(ServTab, "Reentrar", function() TeleportService:Teleport(game.PlaceId, LP) end)
+
+-- // NOVA ABA: TAGS (POSICIONADA APÓS SERVIDOR) // --
+local TagTab = AddTab("Tags", "🌊")
+AddLabel(TagTab, "Personalização de Rank")
+
+AddButton(TagTab, "ATIVAR TAG SUPREMA (Rainbow)", function()
+    pcall(function()
+        if LP.Character and LP.Character:FindFirstChild("Head") then
+            -- Remove tag antiga se houver
+            if LP.Character.Head:FindFirstChild("ReiTag") then LP.Character.Head.ReiTag:Destroy() end
             
-            const newUser = { name, email, pass };
-            users.push(newUser);
-            localStorage.setItem('nex_users', JSON.stringify(users));
-            loginUser(newUser);
-        }
+            local bg = Instance.new("BillboardGui", LP.Character.Head)
+            bg.Name = "ReiTag"
+            bg.Size = UDim2.new(0, 300, 0, 60)
+            bg.StudsOffset = Vector3.new(0, 3.5, 0)
+            bg.AlwaysOnTop = true
+            
+            local t = Instance.new("TextLabel", bg)
+            t.Size = UDim2.new(1,0,1,0)
+            t.BackgroundTransparency = 1
+            t.TextSize = 22
+            t.Font = Enum.Font.GothamBlack
+            t.Text = "👑 IMPERADOR SUPREMO 👑"
+            t.TextStrokeTransparency = 0
+            t.TextStrokeColor3 = Color3.new(0,0,0)
+            
+            -- Loop Rainbow (Mantido como pedido, mas o script geral está azul)
+            task.spawn(function()
+                local h = 0
+                while bg.Parent do
+                    h = (h + 0.01) % 1
+                    t.TextColor3 = Color3.fromHSV(h, 1, 1)
+                    task.wait(0.04)
+                end
+            end)
+            Notify("Visual", "Tag Imperial Ativada!")
+        end
+    end)
+end)
 
-        function loginUser(user) {
-            localStorage.setItem('nex_session', JSON.stringify(user));
-            enterApp();
-        }
+AddButton(TagTab, "Remover Tag", function()
+     if LP.Character and LP.Character:FindFirstChild("Head") and LP.Character.Head:FindFirstChild("ReiTag") then
+        LP.Character.Head.ReiTag:Destroy()
+        Notify("Tags", "Tag removida.")
+     end
+end)
 
-        function checkSession() {
-            if (localStorage.getItem('nex_session')) enterApp();
-        }
-
-        function enterApp() {
-            document.getElementById('gatekeeper').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('nex_session');
-            location.reload();
-        }
-
-        function copyScript() {
-            const code = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/leirbag975/IMPERADOR/refs/heads/main/.gitignore"))()';
-            navigator.clipboard.writeText(code).then(() => alert("Script Copiado!"));
-        }
-    </script>
-</body>
-</html>
+--// FINALIZAÇÃO //--
+Notify("FUTURO REI", "Imperador Supremo Totalmente Carregado (Azul).")

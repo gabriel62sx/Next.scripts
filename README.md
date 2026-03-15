@@ -1,99 +1,163 @@
---// [IMPERADOR] • LOADING SCREEN IMPERIAL (MODIFICADO: AZUL & PRETO) //--
+--// [IMPERADOR] • LOADING SCREEN IMPERIAL (LIQUID AURA V2) //--
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 local CoreGui = game:GetService("CoreGui")
+local RunService = game:GetService("RunService")
 
-local Blur = Instance.new("BlurEffect")
-Blur.Size = 0
-Blur.Parent = Lighting
-TweenService:Create(Blur, TweenInfo.new(0.6), {Size = 18}):Play()
+-- Limpa carregamentos anteriores se houver
+if CoreGui:FindFirstChild("FuturoReiLoading") then 
+    CoreGui.FuturoReiLoading:Destroy() 
+end
 
 local LoadGui = Instance.new("ScreenGui")
 LoadGui.Name = "FuturoReiLoading"
 LoadGui.IgnoreGuiInset = true
 LoadGui.Parent = CoreGui
+LoadGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local LoadMain = Instance.new("Frame", LoadGui)
 LoadMain.Size = UDim2.fromScale(1,1)
-LoadMain.BackgroundColor3 = Color3.fromRGB(8,8,8)
-LoadMain.BackgroundTransparency = 0.25 
+LoadMain.BackgroundColor3 = Color3.fromRGB(0,0,0)
+LoadMain.BackgroundTransparency = 0.4 -- Fundo transparente/escurecido
 
-local Logo = Instance.new("TextLabel", LoadMain)
-Logo.Size = UDim2.new(0,420,0,60)
-Logo.Position = UDim2.fromScale(0.5,0.42)
-Logo.AnchorPoint = Vector2.new(0.5,0.5)
-Logo.BackgroundTransparency = 1
-Logo.Text = "🥶!MPERADO4🥶"
-Logo.Font = Enum.Font.GothamBlack
-Logo.TextSize = 42
-Logo.TextColor3 = Color3.fromRGB(0, 140, 255) -- >> AZUL
-Logo.TextTransparency = 1
+-- // EFEITO DE AURA NAS BORDAS // --
+local AuraFrame = Instance.new("Frame", LoadMain)
+AuraFrame.Size = UDim2.fromScale(1, 1)
+AuraFrame.BackgroundTransparency = 1
+local AuraStroke = Instance.new("UIStroke", AuraFrame)
+AuraStroke.Thickness = 12
+AuraStroke.Color = Color3.fromRGB(0, 140, 255)
+AuraStroke.Transparency = 0.4
 
-local Sub = Instance.new("TextLabel", LoadMain)
-Sub.Size = UDim2.new(0,420,0,26)
-Sub.Position = UDim2.fromScale(0.5,0.48)
-Sub.AnchorPoint = Vector2.new(0.5,0.5)
-Sub.BackgroundTransparency = 1
-Sub.Text = "REI ESTÁ DE VOLTA"
-Sub.Font = Enum.Font.GothamMedium
-Sub.TextSize = 15
-Sub.TextColor3 = Color3.fromRGB(200,200,200)
-Sub.TextTransparency = 1
-
-local Phrase = Instance.new("TextLabel", LoadMain)
-Phrase.Size = UDim2.new(0,420,0,22)
-Phrase.Position = UDim2.fromScale(0.5,0.56)
-Phrase.AnchorPoint = Vector2.new(0.5,0.5)
-Phrase.BackgroundTransparency = 1
-Phrase.Text = ""
-Phrase.Font = Enum.Font.GothamSemibold
-Phrase.TextSize = 14
-Phrase.TextColor3 = Color3.fromRGB(220,220,220)
-Phrase.TextTransparency = 1
-
-local BarBg = Instance.new("Frame", LoadMain)
-BarBg.Size = UDim2.new(0,380,0,6)
-BarBg.Position = UDim2.fromScale(0.5,0.62)
-BarBg.AnchorPoint = Vector2.new(0.5,0.5)
-BarBg.BackgroundColor3 = Color3.fromRGB(30,30,30)
-
-local Bar = Instance.new("Frame", BarBg)
-Bar.Size = UDim2.new(0,0,1,0)
-Bar.BackgroundColor3 = Color3.fromRGB(0, 140, 255) -- >> AZUL
-
-Instance.new("UICorner", BarBg).CornerRadius = UDim.new(1,0)
-Instance.new("UICorner", Bar).CornerRadius = UDim.new(1,0)
-
-TweenService:Create(Logo, TweenInfo.new(0.6), {TextTransparency = 0}):Play()
-TweenService:Create(Sub, TweenInfo.new(0.6), {TextTransparency = 0}):Play()
-
-local phrases = {"ABRINDO CAMINHO PRO REI", "O NOSSO REI VOLTOU", "O REI CHEGOU"}
 task.spawn(function()
-    for i, text in ipairs(phrases) do
-        Phrase.TextTransparency = 1
-        Phrase.Text = text
-        TweenService:Create(Phrase, TweenInfo.new(0.4), {TextTransparency = 0}):Play()
-        task.wait(1.3)
+    while LoadGui.Parent do
+        TweenService:Create(AuraStroke, TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {Transparency = 0.8, Thickness = 4}):Play()
+        task.wait(3)
     end
 end)
 
-TweenService:Create(Bar, TweenInfo.new(3.8, Enum.EasingStyle.Quad), {Size = UDim2.new(1,0,1,0)}):Play()
+-- // EFEITO DE LÍQUIDO ESCORRENDO // --
+local isLoading = true
+local function CreateDrop()
+    if not isLoading then return end
+    local drop = Instance.new("Frame", LoadMain)
+    drop.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
+    drop.BorderSizePixel = 0
+    local sizeX = math.random(2, 5)
+    drop.Size = UDim2.new(0, sizeX, 0, math.random(15, 40))
+    drop.Position = UDim2.new(math.random() * 1, 0, 0, -50)
+    
+    local corner = Instance.new("UICorner", drop)
+    corner.CornerRadius = UDim.new(1, 0)
+    
+    local endY = math.random(150, 600)
+    local timeToFall = math.random(15, 35) / 10
+    
+    local tween = TweenService:Create(drop, TweenInfo.new(timeToFall, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+        Position = UDim2.new(drop.Position.X.Scale, 0, 0, endY), 
+        BackgroundTransparency = 1
+    })
+    tween:Play()
+    tween.Completed:Connect(function() drop:Destroy() end)
+end
 
-task.wait(4.2)
-
-TweenService:Create(LoadMain, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
-TweenService:Create(Logo, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-TweenService:Create(Sub, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-TweenService:Create(Phrase, TweenInfo.new(0.4), {TextTransparency = 1}):Play()
-TweenService:Create(Blur, TweenInfo.new(0.5), {Size = 0}):Play()
-
-task.delay(0.6, function()
-    LoadGui:Destroy()
-    Blur:Destroy()
+task.spawn(function()
+    while isLoading do
+        CreateDrop()
+        task.wait(math.random(2, 8) / 100) -- Velocidade em que as gotas aparecem
+    end
 end)
 
---// INÍCIO DO SCRIPT PRINCIPAL //--
+-- // BARRA DE CARREGAMENTO CENTRAL // --
+local CenterContainer = Instance.new("Frame", LoadMain)
+CenterContainer.Size = UDim2.new(0, 400, 0, 120)
+CenterContainer.Position = UDim2.fromScale(0.5, 0.5)
+CenterContainer.AnchorPoint = Vector2.new(0.5, 0.5)
+CenterContainer.BackgroundTransparency = 1
+
+local Logo = Instance.new("TextLabel", CenterContainer)
+Logo.Size = UDim2.new(1, 0, 0, 40)
+Logo.Position = UDim2.new(0, 0, 0, 10)
+Logo.BackgroundTransparency = 1
+Logo.Text = "🥶 IMPERADOR 🥶"
+Logo.Font = Enum.Font.GothamBlack
+Logo.TextSize = 38
+Logo.TextColor3 = Color3.fromRGB(0, 140, 255)
+Logo.TextStrokeTransparency = 0.6
+
+local SubTitle = Instance.new("TextLabel", CenterContainer)
+SubTitle.Size = UDim2.new(1, 0, 0, 20)
+SubTitle.Position = UDim2.new(0, 0, 0, 50)
+SubTitle.BackgroundTransparency = 1
+SubTitle.Text = "PREPARANDO O RETORNO..."
+SubTitle.Font = Enum.Font.GothamMedium
+SubTitle.TextSize = 14
+SubTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+
+local BarBg = Instance.new("Frame", CenterContainer)
+BarBg.Size = UDim2.new(0, 360, 0, 8)
+BarBg.Position = UDim2.new(0.5, -180, 0, 80)
+BarBg.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+Instance.new("UICorner", BarBg).CornerRadius = UDim.new(1, 0)
+
+local BarStroke = Instance.new("UIStroke", BarBg)
+BarStroke.Color = Color3.fromRGB(0, 140, 255)
+BarStroke.Thickness = 1
+BarStroke.Transparency = 0.3
+
+local BarFill = Instance.new("Frame", BarBg)
+BarFill.Size = UDim2.new(0, 0, 1, 0)
+BarFill.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
+Instance.new("UICorner", BarFill).CornerRadius = UDim.new(1, 0)
+
+local PctText = Instance.new("TextLabel", CenterContainer)
+PctText.Size = UDim2.new(1, 0, 0, 20)
+PctText.Position = UDim2.new(0, 0, 0, 95)
+PctText.BackgroundTransparency = 1
+PctText.Text = "0%"
+PctText.Font = Enum.Font.GothamBold
+PctText.TextSize = 13
+PctText.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- // LÓGICA DE 0 A 100% // --
+local totalTime = 4.0 -- Tempo ideal (não mt rápido, não mt lento)
+local steps = 100
+local stepTime = totalTime / steps
+
+for i = 1, 100 do
+    TweenService:Create(BarFill, TweenInfo.new(stepTime, Enum.EasingStyle.Linear), {Size = UDim2.new(i/100, 0, 1, 0)}):Play()
+    PctText.Text = tostring(i) .. "%"
+    
+    if i == 30 then SubTitle.Text = "CARREGANDO MÓDULOS..." end
+    if i == 70 then SubTitle.Text = "INJETANDO AURA IMPERIAL..." end
+    if i == 95 then SubTitle.Text = "PRONTO PARA DOMINAR." end
+    
+    task.wait(stepTime)
+end
+
+task.wait(0.6)
+isLoading = false -- Para as gotas
+
+-- // TRANSIÇÃO DE SAÍDA SUAVE // --
+for _, v in pairs(CenterContainer:GetDescendants()) do
+    if v:IsA("TextLabel") then
+        TweenService:Create(v, TweenInfo.new(0.6), {TextTransparency = 1, TextStrokeTransparency = 1}):Play()
+    elseif v:IsA("Frame") then
+        TweenService:Create(v, TweenInfo.new(0.6), {BackgroundTransparency = 1}):Play()
+    elseif v:IsA("UIStroke") then
+        TweenService:Create(v, TweenInfo.new(0.6), {Transparency = 1}):Play()
+    end
+end
+TweenService:Create(AuraStroke, TweenInfo.new(0.6), {Transparency = 1}):Play()
+TweenService:Create(LoadMain, TweenInfo.new(0.8), {BackgroundTransparency = 1}):Play()
+
+task.wait(0.8)
+LoadGui:Destroy()
+
+--=========================================--
+--// INÍCIO DO SCRIPT PRINCIPAL (MENU) //--
+--=========================================--
 
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
@@ -119,11 +183,10 @@ ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local CrownIconID = "rbxassetid://14567278958" 
 
--- // PALETA DE CORES: MUDADO PARA AZUL // --
 local Colors = {
     Bg = Color3.fromRGB(8, 8, 8),
     DarkBg = Color3.fromRGB(15, 15, 15),
-    Accent = Color3.fromRGB(0, 140, 255), -- AZUL VIBRANTE
+    Accent = Color3.fromRGB(0, 140, 255),
     White = Color3.fromRGB(255, 255, 255),
     Text = Color3.fromRGB(240, 240, 240),
     Gray = Color3.fromRGB(80, 80, 80)
@@ -255,7 +318,7 @@ spawn(function()
     while Title.Parent do
         Title.TextColor3 = Colors.White
         wait(0.5)
-        Title.TextColor3 = Colors.Accent -- PISCA AZUL
+        Title.TextColor3 = Colors.Accent
         wait(0.5)
     end
 end)
@@ -718,7 +781,6 @@ function StartFly()
     Notify("FLY", "ATIVADO! Use W,A,S,D + Espaço/Ctrl")
 end
 
-
 -- // SISTEMA DE TP RÁPIDO COM PAINEL (F2) // --
 local TpPanel = Instance.new("Frame", ScreenGui)
 TpPanel.Size = UDim2.new(0, 220, 0, 250)
@@ -773,12 +835,10 @@ local function CreateTpButton(text, func)
     end)
 end
 
--- Botões do F2
 CreateTpButton("Ir para o Spawn Principal", function(hrp)
     local spawnFound = false
     for _, v in pairs(workspace:GetDescendants()) do
         if v:IsA("SpawnLocation") then
-            -- TP Instantâneo para o Spawn (mudando o CFrame)
             hrp.CFrame = v.CFrame + Vector3.new(0, 5, 0)
             spawnFound = true
             break
@@ -823,7 +883,6 @@ CreateTpButton("Ir para o Ponto Mais Alto", function(hrp)
     end
 end)
 
-
 -- // TECLAS DE ATALHO (F1 E F2) // --
 UserInputService.InputBegan:Connect(function(input, gpe)
     if gpe then return end
@@ -837,12 +896,12 @@ UserInputService.InputBegan:Connect(function(input, gpe)
     elseif input.KeyCode == Enum.KeyCode.F2 then
         TpPanel.Visible = not TpPanel.Visible
         if TpPanel.Visible then
-            Notify("PAINEL TP", "Aberto (F2)")
+            Notify("PAINEL TP", "Aberto!")
         else
-            Notify("PAINEL TP", "Fechado (F2)")
+            Notify("PAINEL TP", "Fechado!")
         end
     end
 end)
 
---// FINALIZAÇÃO //--
-Notify("FUTURO REI", "Imperador Supremo Totalmente Carregado (Azul).")
+-- // NOTIFICAÇÃO FINAL // --
+Notify("IMPERADOR", "Script Supremo carregado com sucesso!")

@@ -381,7 +381,6 @@ AddButton(AdminTab, "Simple Spy V2 (Remotes)", function() loadstring(game:HttpGe
 local PlayTab = AddTab("Jogador", "🌊")
 AddLabel(PlayTab, "Atributos customizáveis")
 
--- GOD MODE
 AddButton(PlayTab, "GOD MODE (Vida Infinita)", function()
     pcall(function()
         if LP.Character and LP.Character:FindFirstChild("Humanoid") then
@@ -427,7 +426,6 @@ AddButton(PlayTab, "Noclip (Atravessar)", function()
     RunService.Stepped:Connect(function() for _,v in pairs(LP.Character:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end end)
     Notify("Noclip", "Ativado.")
 end)
-AddButton(PlayTab, "Fly GUI V3", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
 
 -- ABA TELEPORTES
 local TpTab = AddTab("Teleportes", "🌊")
@@ -456,7 +454,6 @@ AddInputRow(TpTab, "TP para Player", "Nome...", function(txt)
     end
     Notify("Erro", "Jogador não encontrado.")
 end)
-
 
 -- ABA COMBATE
 local CombatTab = AddTab("Combate", "🌊")
@@ -543,14 +540,9 @@ end)
 
 AddInputRow(MiscTab, "Chat Rainbow (RichText)", "Sua msg...", function(msg)
     if msg == "" then return end
-    
-    local function toHex(color)
-        return string.format("#%02X%02X%02X", color.R * 255, color.G * 255, color.B * 255)
-    end
-    
+    local function toHex(color) return string.format("#%02X%02X%02X", color.R * 255, color.G * 255, color.B * 255) end
     local coloredMsg = ""
     local freq = 0.5
-    
     for i = 1, #msg do
         local r = math.sin(freq * i + 0) * 127 + 128
         local g = math.sin(freq * i + 2) * 127 + 128
@@ -558,7 +550,6 @@ AddInputRow(MiscTab, "Chat Rainbow (RichText)", "Sua msg...", function(msg)
         local hex = toHex(Color3.fromRGB(r, g, b))
         coloredMsg = coloredMsg .. '<font color="' .. hex .. '">' .. string.sub(msg, i, i) .. '</font>'
     end
-    
     local RS = game:GetService("ReplicatedStorage")
     if RS:FindFirstChild("DefaultChatSystemChatEvents") then
         RS.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(coloredMsg, "All")
@@ -569,7 +560,6 @@ AddInputRow(MiscTab, "Chat Rainbow (RichText)", "Sua msg...", function(msg)
 end)
 
 AddButton(MiscTab, "Fling Universal (Derrubar)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe/main/obf_rf6iQURzs1syxgblQD9UJU8tJAmcC017Cn373866XC747y26hOOi86F87C55532c.lua.txt"))() end)
-
 AddButton(MiscTab, "Spinbot (Girar Rápido)", function()
     local s = Instance.new("BodyAngularVelocity", LP.Character.HumanoidRootPart)
     s.Name = "SpinBot"
@@ -596,22 +586,18 @@ AddButton(ServTab, "Trocar de Server (Hop)", function()
 end)
 AddButton(ServTab, "Reentrar", function() TeleportService:Teleport(game.PlaceId, LP) end)
 
--- // NOVA ABA: TAGS (POSICIONADA APÓS SERVIDOR) // --
+-- ABA TAGS
 local TagTab = AddTab("Tags", "🌊")
 AddLabel(TagTab, "Personalização de Rank")
-
 AddButton(TagTab, "ATIVAR TAG SUPREMA (Rainbow)", function()
     pcall(function()
         if LP.Character and LP.Character:FindFirstChild("Head") then
-            -- Remove tag antiga se houver
             if LP.Character.Head:FindFirstChild("ReiTag") then LP.Character.Head.ReiTag:Destroy() end
-            
             local bg = Instance.new("BillboardGui", LP.Character.Head)
             bg.Name = "ReiTag"
             bg.Size = UDim2.new(0, 300, 0, 60)
             bg.StudsOffset = Vector3.new(0, 3.5, 0)
             bg.AlwaysOnTop = true
-            
             local t = Instance.new("TextLabel", bg)
             t.Size = UDim2.new(1,0,1,0)
             t.BackgroundTransparency = 1
@@ -620,8 +606,6 @@ AddButton(TagTab, "ATIVAR TAG SUPREMA (Rainbow)", function()
             t.Text = "👑 IMPERADOR SUPREMO 👑"
             t.TextStrokeTransparency = 0
             t.TextStrokeColor3 = Color3.new(0,0,0)
-            
-            -- Loop Rainbow (Mantido como pedido, mas o script geral está azul)
             task.spawn(function()
                 local h = 0
                 while bg.Parent do
@@ -640,6 +624,224 @@ AddButton(TagTab, "Remover Tag", function()
         LP.Character.Head.ReiTag:Destroy()
         Notify("Tags", "Tag removida.")
      end
+end)
+
+-- // SISTEMA DE FLY COM PAINEL (F1) // --
+local FlySettings = { Flying = false, Speed = 50, BodyVelocity = nil, BodyGyro = nil, Connection = nil }
+
+local FlyPanel = Instance.new("Frame", ScreenGui)
+FlyPanel.Size = UDim2.new(0, 200, 0, 100)
+FlyPanel.Position = UDim2.new(0.8, -20, 0.8, -20)
+FlyPanel.BackgroundColor3 = Colors.Bg
+FlyPanel.Visible = false
+CreateCorner(FlyPanel, 8)
+MakeDraggable(FlyPanel, FlyPanel)
+
+local FlyStroke = Instance.new("UIStroke", FlyPanel)
+FlyStroke.Color = Colors.Accent
+FlyStroke.Thickness = 2
+
+local FlyTitle = Instance.new("TextLabel", FlyPanel)
+FlyTitle.Size = UDim2.new(1, 0, 0, 30)
+FlyTitle.Text = "VELOCIDADE DO VOO"
+FlyTitle.TextColor3 = Colors.White
+FlyTitle.Font = Enum.Font.GothamBold
+FlyTitle.TextSize = 14
+FlyTitle.BackgroundTransparency = 1
+
+local SpeedInput = Instance.new("TextBox", FlyPanel)
+SpeedInput.Size = UDim2.new(0.8, 0, 0, 30)
+SpeedInput.Position = UDim2.new(0.1, 0, 0.5, 0)
+SpeedInput.BackgroundColor3 = Colors.DarkBg
+SpeedInput.Text = tostring(FlySettings.Speed)
+SpeedInput.TextColor3 = Colors.Accent
+SpeedInput.PlaceholderText = "Vel..."
+CreateCorner(SpeedInput, 5)
+
+SpeedInput.FocusLost:Connect(function()
+    local val = tonumber(SpeedInput.Text)
+    if val then
+        FlySettings.Speed = val
+        Notify("Fly", "Velocidade alterada para: " .. val)
+    end
+end)
+
+local StartFly, StopFly
+
+function StopFly()
+    FlySettings.Flying = false
+    FlyPanel.Visible = false
+    if FlySettings.Connection then FlySettings.Connection:Disconnect() end
+    if FlySettings.BodyGyro then FlySettings.BodyGyro:Destroy() end
+    if FlySettings.BodyVelocity then FlySettings.BodyVelocity:Destroy() end
+    if LP.Character and LP.Character:FindFirstChild("Humanoid") then LP.Character.Humanoid.PlatformStand = false end
+    Notify("FLY", "DESATIVADO.")
+end
+
+function StartFly()
+    local char = LP.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+    
+    FlySettings.Flying = true
+    FlyPanel.Visible = true
+    
+    FlySettings.BodyGyro = Instance.new("BodyGyro", char.HumanoidRootPart)
+    FlySettings.BodyGyro.P = 9e4
+    FlySettings.BodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    FlySettings.BodyGyro.CFrame = char.HumanoidRootPart.CFrame
+    
+    FlySettings.BodyVelocity = Instance.new("BodyVelocity", char.HumanoidRootPart)
+    FlySettings.BodyVelocity.Velocity = Vector3.new(0, 0, 0)
+    FlySettings.BodyVelocity.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    
+    char.Humanoid.PlatformStand = true
+    
+    FlySettings.Connection = RunService.RenderStepped:Connect(function()
+        if not FlySettings.Flying or not LP.Character or not LP.Character:FindFirstChild("HumanoidRootPart") then
+            StopFly()
+            return
+        end
+        local look = Camera.CFrame.LookVector
+        local right = Camera.CFrame.RightVector
+        local move = Vector3.new(0,0,0)
+        
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then move = move + look end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then move = move - look end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then move = move - right end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then move = move + right end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then move = move + Vector3.new(0,1,0) end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then move = move - Vector3.new(0,1,0) end
+        
+        FlySettings.BodyVelocity.Velocity = move * FlySettings.Speed
+        FlySettings.BodyGyro.CFrame = Camera.CFrame
+    end)
+    Notify("FLY", "ATIVADO! Use W,A,S,D + Espaço/Ctrl")
+end
+
+
+-- // SISTEMA DE TP RÁPIDO COM PAINEL (F2) // --
+local TpPanel = Instance.new("Frame", ScreenGui)
+TpPanel.Size = UDim2.new(0, 220, 0, 250)
+TpPanel.Position = UDim2.new(0.05, 0, 0.4, 0)
+TpPanel.BackgroundColor3 = Colors.Bg
+TpPanel.Visible = false
+CreateCorner(TpPanel, 8)
+MakeDraggable(TpPanel, TpPanel)
+
+local TpStroke = Instance.new("UIStroke", TpPanel)
+TpStroke.Color = Colors.Accent
+TpStroke.Thickness = 2
+
+local TpTitle = Instance.new("TextLabel", TpPanel)
+TpTitle.Size = UDim2.new(1, 0, 0, 30)
+TpTitle.Text = "TELEPORTE (F2)"
+TpTitle.TextColor3 = Colors.White
+TpTitle.Font = Enum.Font.GothamBold
+TpTitle.TextSize = 14
+TpTitle.BackgroundTransparency = 1
+
+local TpScroll = Instance.new("ScrollingFrame", TpPanel)
+TpScroll.Size = UDim2.new(1, -10, 1, -40)
+TpScroll.Position = UDim2.new(0, 5, 0, 35)
+TpScroll.BackgroundTransparency = 1
+TpScroll.ScrollBarThickness = 3
+TpScroll.ScrollBarImageColor3 = Colors.Accent
+
+local TpLayout = Instance.new("UIListLayout", TpScroll)
+TpLayout.Padding = UDim.new(0, 5)
+TpLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+local SavedCFrame = nil
+
+local function CreateTpButton(text, func)
+    local btn = Instance.new("TextButton", TpScroll)
+    btn.Size = UDim2.new(0.95, 0, 0, 35)
+    btn.BackgroundColor3 = Colors.DarkBg
+    btn.Text = text
+    btn.TextColor3 = Colors.White
+    btn.Font = Enum.Font.GothamSemibold
+    btn.TextSize = 12
+    CreateCorner(btn, 5)
+    local stroke = Instance.new("UIStroke", btn)
+    stroke.Color = Colors.Accent
+    stroke.Transparency = 0.5
+    
+    btn.MouseButton1Click:Connect(function()
+        if LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then
+            func(LP.Character.HumanoidRootPart)
+        end
+    end)
+end
+
+-- Botões do F2
+CreateTpButton("Ir para o Spawn Principal", function(hrp)
+    local spawnFound = false
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("SpawnLocation") then
+            -- TP Instantâneo para o Spawn (mudando o CFrame)
+            hrp.CFrame = v.CFrame + Vector3.new(0, 5, 0)
+            spawnFound = true
+            break
+        end
+    end
+    if not spawnFound then
+        hrp.CFrame = CFrame.new(0, 50, 0)
+        Notify("TP", "Spawn não encontrado. TP para o centro (0,50,0).")
+    else
+        Notify("TP", "Teleportado para o Spawn!")
+    end
+end)
+
+CreateTpButton("Salvar Posição Atual", function(hrp)
+    SavedCFrame = hrp.CFrame
+    Notify("TP", "Posição salva com sucesso!")
+end)
+
+CreateTpButton("Ir para Posição Salva", function(hrp)
+    if SavedCFrame then
+        hrp.CFrame = SavedCFrame
+        Notify("TP", "Teleportado de volta!")
+    else
+        Notify("Erro", "Nenhuma posição salva.")
+    end
+end)
+
+CreateTpButton("Ir para o Ponto Mais Alto", function(hrp)
+    local highest = -math.huge
+    local target = nil
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") and v.Anchored and v.Size.Y > 1 then
+            if v.Position.Y > highest and v.Position.Y < 5000 then 
+                highest = v.Position.Y
+                target = v
+            end
+        end
+    end
+    if target then
+        hrp.CFrame = target.CFrame + Vector3.new(0, target.Size.Y/2 + 5, 0)
+        Notify("TP", "Teleportado para o topo!")
+    end
+end)
+
+
+-- // TECLAS DE ATALHO (F1 E F2) // --
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe then return end
+    
+    if input.KeyCode == Enum.KeyCode.F1 then
+        if FlySettings.Flying then
+            StopFly()
+        else
+            StartFly()
+        end
+    elseif input.KeyCode == Enum.KeyCode.F2 then
+        TpPanel.Visible = not TpPanel.Visible
+        if TpPanel.Visible then
+            Notify("PAINEL TP", "Aberto (F2)")
+        else
+            Notify("PAINEL TP", "Fechado (F2)")
+        end
+    end
 end)
 
 --// FINALIZAÇÃO //--
